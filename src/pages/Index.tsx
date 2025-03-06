@@ -1,13 +1,60 @@
-// Update this page (the content is just a fallback if you fail to update the page)
 
-const Index = () => {
+import React, { useState } from 'react';
+import { useCalendar, CalendarProvider } from '@/context/CalendarContext';
+import Header from '@/components/layout/Header';
+import MonthView from '@/components/ui/calendar-view/MonthView';
+import WeekView from '@/components/ui/calendar-view/WeekView';
+import DayView from '@/components/ui/calendar-view/DayView';
+import NoteDialog from '@/components/ui/notes/NoteDialog';
+import NoteList from '@/components/ui/notes/NoteList';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+
+const CalendarApp: React.FC = () => {
+  const { calendarMode } = useCalendar();
+  const [isAddNoteOpen, setIsAddNoteOpen] = useState(false);
+  
+  const handleAddNote = () => {
+    setIsAddNoteOpen(true);
+  };
+  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen flex flex-col">
+      <Header onAddNote={handleAddNote} />
+      
+      <div className="flex-1 overflow-hidden">
+        <ResizablePanelGroup direction="horizontal">
+          <ResizablePanel defaultSize={70} minSize={40}>
+            <div className="h-full overflow-auto">
+              {calendarMode === 'month' && <MonthView />}
+              {calendarMode === 'week' && <WeekView />}
+              {calendarMode === 'day' && <DayView />}
+            </div>
+          </ResizablePanel>
+          
+          <ResizableHandle withHandle />
+          
+          <ResizablePanel defaultSize={30} minSize={25}>
+            <div className="h-full overflow-hidden">
+              <NoteList />
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
+      
+      <NoteDialog 
+        open={isAddNoteOpen}
+        onOpenChange={setIsAddNoteOpen}
+        mode="add"
+      />
     </div>
+  );
+};
+
+const Index: React.FC = () => {
+  return (
+    <CalendarProvider>
+      <CalendarApp />
+    </CalendarProvider>
   );
 };
 
