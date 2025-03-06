@@ -10,7 +10,7 @@ import NoteList from '@/components/ui/notes/NoteList';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
 const CalendarApp: React.FC = () => {
-  const { calendarMode, selectedNote } = useCalendar();
+  const { calendarMode, selectedNote, selectedDate } = useCalendar();
   const [isAddNoteOpen, setIsAddNoteOpen] = useState(false);
   const [isEditNoteOpen, setIsEditNoteOpen] = useState(false);
   
@@ -46,6 +46,7 @@ const CalendarApp: React.FC = () => {
         open={isAddNoteOpen}
         onOpenChange={setIsAddNoteOpen}
         mode="add"
+        preSelectedTime={selectedDate}
       />
       
       <NoteDialog 
