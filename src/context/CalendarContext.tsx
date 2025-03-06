@@ -11,9 +11,11 @@ interface CalendarContextType {
   selectedDate: Date;
   calendarMode: CalendarMode;
   notes: Note[];
+  selectedNote: Note | null;
   setCurrentDate: (date: Date) => void;
   setSelectedDate: (date: Date) => void;
   setCalendarMode: (mode: CalendarMode) => void;
+  setSelectedNote: (note: Note | null) => void;
   nextPeriod: () => void;
   prevPeriod: () => void;
   addNote: (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>) => void;
@@ -45,6 +47,7 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [calendarMode, setCalendarMode] = useState<CalendarMode>('month');
   const [notes, setNotes] = useState<Note[]>(initialNotes);
+  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const { t } = useLanguage();
   
   // Load notes from localStorage on initial render
@@ -152,9 +155,11 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         selectedDate,
         calendarMode,
         notes,
+        selectedNote,
         setCurrentDate,
         setSelectedDate,
         setCalendarMode,
+        setSelectedNote,
         nextPeriod,
         prevPeriod,
         addNote,
