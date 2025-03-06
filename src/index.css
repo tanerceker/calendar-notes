@@ -40,6 +40,40 @@
     --calendar-selected-foreground: 0 0% 100%;
   }
 
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+
+    --calendar-today: 217.2 91.2% 59.8%;
+    --calendar-selected: 217.2 91.2% 59.8%;
+    --calendar-selected-foreground: 0 0% 100%;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
@@ -52,11 +86,11 @@
 
 @layer utilities {
   .glass-effect {
-    @apply backdrop-blur-md bg-white/90 border border-white/20 shadow-lg;
+    @apply backdrop-blur-md bg-white/90 dark:bg-slate-900/80 border border-white/20 dark:border-white/10 shadow-lg;
   }
 
   .card-shadow {
-    @apply shadow-[0_8px_30px_rgb(0,0,0,0.06)];
+    @apply shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)];
   }
   
   .focus-ring {

@@ -1,10 +1,21 @@
 
 import React from 'react';
 import { useCalendar } from '@/context/CalendarContext';
+import { useTheme } from '@/context/ThemeContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { CalendarMode } from '@/types/calendar';
 import { format } from 'date-fns';
-import { Calendar, ChevronLeft, ChevronRight, MoreHorizontal, Plus } from 'lucide-react';
+import { tr, enUS } from 'date-fns/locale';
+import { 
+  Calendar, 
+  ChevronLeft, 
+  ChevronRight, 
+  Plus, 
+  Moon, 
+  Sun, 
+  Globe 
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,21 +35,26 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
     nextPeriod, 
     prevPeriod 
   } = useCalendar();
+  
+  const { theme, setTheme } = useTheme();
+  const { locale, setLocale, t } = useLanguage();
+
+  const dateLocale = locale === 'tr' ? tr : enUS;
 
   const viewOptions: { label: string; value: CalendarMode }[] = [
-    { label: 'Month', value: 'month' },
-    { label: 'Week', value: 'week' },
-    { label: 'Day', value: 'day' },
+    { label: t('month'), value: 'month' },
+    { label: t('week'), value: 'week' },
+    { label: t('day'), value: 'day' },
   ];
 
   const getHeaderTitle = (): string => {
     switch (calendarMode) {
       case 'month':
-        return format(currentDate, 'MMMM yyyy');
+        return format(currentDate, 'MMMM yyyy', { locale: dateLocale });
       case 'week':
-        return `Week of ${format(currentDate, 'MMMM d, yyyy')}`;
+        return `${t('weekOf')} ${format(currentDate, 'MMMM d, yyyy', { locale: dateLocale })}`;
       case 'day':
-        return format(currentDate, 'EEEE, MMMM d, yyyy');
+        return format(currentDate, 'EEEE, MMMM d, yyyy', { locale: dateLocale });
       default:
         return '';
     }
@@ -48,7 +64,7 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
     <header className="flex items-center justify-between p-4 glass-effect sticky top-0 z-10 animate-in fade-in">
       <div className="flex items-center space-x-2">
         <Calendar className="h-5 w-5 text-primary" />
-        <h1 className="text-xl font-semibold text-balance">Calendar Notes</h1>
+        <h1 className="text-xl font-semibold text-balance">{t('calendarNotes')}</h1>
       </div>
       
       <div className="flex items-center space-x-4">
@@ -92,6 +108,35 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
           ))}
         </div>
         
+        <div className="flex items-center space-x-2">
+          {/* Dil Değiştirme Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="focus-ring h-8 w-8">
+                <Globe className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setLocale('tr')}>
+                🇹🇷 {t('turkish')}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setLocale('en')}>
+                🇬🇧 {t('english')}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Tema Değiştirme Butonu */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+            className="focus-ring h-8 w-8"
+          >
+            {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+          </Button>
+        </div>
+        
         <Button
           variant="default"
           size="sm"
@@ -99,7 +144,7 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
           className="focus-ring"
         >
           <Plus className="h-4 w-4 mr-1" />
-          <span>Add Note</span>
+          <span>{t('addNote')}</span>
         </Button>
       </div>
     </header>
