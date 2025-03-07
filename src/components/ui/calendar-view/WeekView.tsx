@@ -60,7 +60,7 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
             <div 
               key={day.toISOString()} 
               className={`
-                flex-1 text-center py-2 
+                flex-1 text-center py-2 cursor-pointer
                 ${isToday ? 'font-semibold text-primary' : ''}
                 ${isSelected ? 'bg-secondary/50' : ''}
               `}
@@ -99,7 +99,7 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
                   {notesForHour.map((note) => (
                     <div 
                       key={note.id}
-                      className="text-xs p-1 mb-1 rounded truncate transition-opacity hover:opacity-90"
+                      className="text-xs p-1 mb-1 rounded truncate transition-opacity hover:opacity-90 cursor-pointer"
                       style={{ 
                         backgroundColor: note.color || '#3498db', 
                         color: 'white'
