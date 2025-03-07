@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -33,7 +33,8 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
     calendarMode, 
     setCalendarMode, 
     nextPeriod, 
-    prevPeriod 
+    prevPeriod,
+    setCurrentDate 
   } = useCalendar();
   
   const { theme, setTheme } = useTheme();
@@ -47,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
     { label: t('day'), value: 'day' },
   ];
 
-  const getHeaderTitle = (): string => {
+  const getHeaderTitle = useCallback((): string => {
     switch (calendarMode) {
       case 'month':
         return format(currentDate, 'MMMM yyyy', { locale: dateLocale });
@@ -58,7 +59,11 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
       default:
         return '';
     }
-  };
+  }, [calendarMode, currentDate, dateLocale, t]);
+
+  const goToToday = useCallback(() => {
+    setCurrentDate(new Date());
+  }, [setCurrentDate]);
 
   return (
     <header className="flex items-center justify-between p-4 glass-effect sticky top-0 z-10 animate-in fade-in">
@@ -95,6 +100,15 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
             </Button>
           </div>
           
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={goToToday}
+            className="text-xs focus-ring px-3"
+          >
+            {t('today')}
+          </Button>
+          
           <div className="flex items-center space-x-2">
             {viewOptions.map((option) => (
               <Button
@@ -122,7 +136,7 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
       </div>
       
       <div className="flex items-center space-x-2">
-        {/* Dil Değiştirme Dropdown */}
+        {/* Language Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="focus-ring h-8 w-8">
@@ -139,7 +153,7 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Tema Değiştirme Butonu */}
+        {/* Theme Toggle Button */}
         <Button
           variant="ghost"
           size="icon"

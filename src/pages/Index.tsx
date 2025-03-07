@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useCalendar, CalendarProvider } from '@/context/CalendarContext';
 import Header from '@/components/layout/Header';
 import MonthView from '@/components/ui/calendar-view/MonthView';
@@ -14,9 +14,31 @@ const CalendarApp: React.FC = () => {
   const [isAddNoteOpen, setIsAddNoteOpen] = useState(false);
   const [isEditNoteOpen, setIsEditNoteOpen] = useState(false);
   
-  const handleAddNote = () => {
+  const handleAddNote = useCallback(() => {
     setIsAddNoteOpen(true);
-  };
+  }, []);
+  
+  const handleEditNoteClose = useCallback((open: boolean) => {
+    setIsEditNoteOpen(open);
+    if (!open) {
+      // When closing, clear the selected note
+      const { setSelectedNote } = useCalendar();
+      setSelectedNote(null);
+    }
+  }, []);
+  
+  const calendarView = useMemo(() => {
+    switch (calendarMode) {
+      case 'month':
+        return <MonthView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />;
+      case 'week':
+        return <WeekView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />;
+      case 'day':
+        return <DayView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />;
+      default:
+        return null;
+    }
+  }, [calendarMode, setIsAddNoteOpen, setIsEditNoteOpen]);
   
   return (
     <div className="h-screen flex flex-col overflow-hidden">
@@ -26,9 +48,7 @@ const CalendarApp: React.FC = () => {
         <ResizablePanelGroup direction="horizontal" className="h-full">
           <ResizablePanel defaultSize={70} minSize={40} className="h-full">
             <div className="h-full overflow-auto">
-              {calendarMode === 'month' && <MonthView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />}
-              {calendarMode === 'week' && <WeekView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />}
-              {calendarMode === 'day' && <DayView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />}
+              {calendarView}
             </div>
           </ResizablePanel>
           
@@ -51,14 +71,7 @@ const CalendarApp: React.FC = () => {
       
       <NoteDialog 
         open={isEditNoteOpen && selectedNote !== null}
-        onOpenChange={(open) => {
-          setIsEditNoteOpen(open);
-          if (!open) {
-            // When closing, clear the selected note
-            const { setSelectedNote } = useCalendar();
-            setSelectedNote(null);
-          }
-        }}
+        onOpenChange={handleEditNoteClose}
         note={selectedNote}
         mode="edit"
       />

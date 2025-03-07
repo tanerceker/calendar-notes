@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { addMonths, subMonths, addWeeks, subWeeks, addDays, subDays } from 'date-fns';
 import { CalendarMode, Note } from '@/types/calendar';
 import { generateCalendarMonth } from '@/lib/calendar-utils';
@@ -26,27 +26,11 @@ interface CalendarContextType {
 
 const CalendarContext = createContext<CalendarContextType | undefined>(undefined);
 
-const initialNotes: Note[] = [
-  {
-    id: '1',
-    title: 'Takvim Notları\'na Hoş Geldiniz',
-    content: 'Başlamanız için örnek bir not.',
-    date: new Date(),
-    tags: ['hoşgeldin'],
-    color: '#3498db',
-    reminder: null,
-    isPinned: true,
-    isCompleted: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
-
 export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [calendarMode, setCalendarMode] = useState<CalendarMode>('month');
-  const [notes, setNotes] = useState<Note[]>(initialNotes);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const { t } = useLanguage();
   
@@ -65,46 +49,69 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setNotes(parsedNotes);
       } catch (error) {
         console.error('Failed to parse saved notes:', error);
+        // If there's an error, create the welcome note
+        createWelcomeNote();
       }
+    } else {
+      // If no notes exist, create the welcome note
+      createWelcomeNote();
     }
   }, []);
+  
+  // Create welcome note function
+  const createWelcomeNote = useCallback(() => {
+    const welcomeNote: Note = {
+      id: '1',
+      title: t('welcome'),
+      content: t('welcomeNote'),
+      date: new Date(),
+      tags: ['hoşgeldin', 'welcome'],
+      color: '#3498db',
+      reminder: null,
+      isPinned: true,
+      isCompleted: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    setNotes([welcomeNote]);
+  }, [t]);
   
   // Save notes to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('calendarNotes', JSON.stringify(notes));
   }, [notes]);
   
-  const nextPeriod = () => {
+  const nextPeriod = useCallback(() => {
     switch (calendarMode) {
       case 'month':
-        setCurrentDate(addMonths(currentDate, 1));
+        setCurrentDate(prevDate => addMonths(prevDate, 1));
         break;
       case 'week':
-        setCurrentDate(addWeeks(currentDate, 1));
+        setCurrentDate(prevDate => addWeeks(prevDate, 1));
         break;
       case 'day':
-        setCurrentDate(addDays(currentDate, 1));
-        setSelectedDate(addDays(selectedDate, 1));
+        setCurrentDate(prevDate => addDays(prevDate, 1));
+        setSelectedDate(prevDate => addDays(prevDate, 1));
         break;
     }
-  };
+  }, [calendarMode]);
   
-  const prevPeriod = () => {
+  const prevPeriod = useCallback(() => {
     switch (calendarMode) {
       case 'month':
-        setCurrentDate(subMonths(currentDate, 1));
+        setCurrentDate(prevDate => subMonths(prevDate, 1));
         break;
       case 'week':
-        setCurrentDate(subWeeks(currentDate, 1));
+        setCurrentDate(prevDate => subWeeks(prevDate, 1));
         break;
       case 'day':
-        setCurrentDate(subDays(currentDate, 1));
-        setSelectedDate(subDays(selectedDate, 1));
+        setCurrentDate(prevDate => subDays(prevDate, 1));
+        setSelectedDate(prevDate => subDays(prevDate, 1));
         break;
     }
-  };
+  }, [calendarMode]);
   
-  const addNote = (note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const addNote = useCallback((note: Omit<Note, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newNote: Note = {
       ...note,
       id: Date.now().toString(),
@@ -112,15 +119,15 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       updatedAt: new Date(),
     };
     
-    setNotes([...notes, newNote]);
+    setNotes(prevNotes => [...prevNotes, newNote]);
     toast({
       title: t('noteAdded'),
       description: t('successfullyCreated'),
     });
-  };
+  }, [t]);
   
-  const updateNote = (updatedNote: Note) => {
-    setNotes(notes.map(note => 
+  const updateNote = useCallback((updatedNote: Note) => {
+    setNotes(prevNotes => prevNotes.map(note => 
       note.id === updatedNote.id 
         ? { ...updatedNote, updatedAt: new Date() } 
         : note
@@ -129,45 +136,57 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       title: t('noteUpdated'),
       description: t('successfullyUpdated'),
     });
-  };
+  }, [t]);
   
-  const deleteNote = (id: string) => {
-    setNotes(notes.filter(note => note.id !== id));
+  const deleteNote = useCallback((id: string) => {
+    setNotes(prevNotes => prevNotes.filter(note => note.id !== id));
     toast({
       title: t('noteDeleted'),
       description: t('successfullyDeleted'),
     });
-  };
+  }, [t]);
   
-  const getNotesForDate = (date: Date): Note[] => {
+  const getNotesForDate = useCallback((date: Date): Note[] => {
     return notes.filter(note => {
       const noteDate = new Date(note.date);
       return noteDate.getDate() === date.getDate() &&
              noteDate.getMonth() === date.getMonth() &&
              noteDate.getFullYear() === date.getFullYear();
     });
-  };
+  }, [notes]);
+  
+  const value = useMemo(() => ({
+    currentDate,
+    selectedDate,
+    calendarMode,
+    notes,
+    selectedNote,
+    setCurrentDate,
+    setSelectedDate,
+    setCalendarMode,
+    setSelectedNote,
+    nextPeriod,
+    prevPeriod,
+    addNote,
+    updateNote,
+    deleteNote,
+    getNotesForDate,
+  }), [
+    currentDate, 
+    selectedDate, 
+    calendarMode, 
+    notes, 
+    selectedNote,
+    nextPeriod,
+    prevPeriod,
+    addNote,
+    updateNote,
+    deleteNote,
+    getNotesForDate
+  ]);
   
   return (
-    <CalendarContext.Provider
-      value={{
-        currentDate,
-        selectedDate,
-        calendarMode,
-        notes,
-        selectedNote,
-        setCurrentDate,
-        setSelectedDate,
-        setCalendarMode,
-        setSelectedNote,
-        nextPeriod,
-        prevPeriod,
-        addNote,
-        updateNote,
-        deleteNote,
-        getNotesForDate,
-      }}
-    >
+    <CalendarContext.Provider value={value}>
       {children}
     </CalendarContext.Provider>
   );

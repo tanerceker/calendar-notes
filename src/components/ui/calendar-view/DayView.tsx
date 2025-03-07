@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { format } from 'date-fns';
@@ -24,28 +24,28 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
     setNotes(getNotesForDate(selectedDate));
   }, [selectedDate, getNotesForDate]);
   
-  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const hours = useMemo(() => Array.from({ length: 24 }, (_, i) => i), []);
   
-  const getNotesForHour = (hour: number): Note[] => {
+  const getNotesForHour = useCallback((hour: number): Note[] => {
     return notes.filter(note => {
       const noteDate = new Date(note.date);
       return noteDate.getHours() === hour;
     });
-  };
+  }, [notes]);
   
-  const handleHourClick = (hour: number) => {
+  const handleHourClick = useCallback((hour: number) => {
     const date = new Date(selectedDate);
     date.setHours(hour);
     setSelectedDate(date);
     onOpenAddNote(true);
-  };
+  }, [selectedDate, setSelectedDate, onOpenAddNote]);
   
-  const handleNoteClick = (note: Note) => {
+  const handleNoteClick = useCallback((note: Note) => {
     setSelectedNote(note);
     onOpenEditNote(true);
-  };
+  }, [setSelectedNote, onOpenEditNote]);
   
-  const currentHour = new Date().getHours();
+  const currentHour = useMemo(() => new Date().getHours(), []);
   
   return (
     <div className="flex flex-col h-full animate-in slide-in">
@@ -178,4 +178,4 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
   );
 };
 
-export default DayView;
+export default React.memo(DayView);
