@@ -19,9 +19,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     if (savedLocale && (savedLocale === 'tr' || savedLocale === 'en')) {
       setLocale(savedLocale);
     } else {
-      // Check browser language as fallback
-      const browserLang = navigator.language.split('-')[0];
-      setLocale(browserLang === 'tr' ? 'tr' : 'en');
+      // Default to Turkish
+      setLocale('tr');
     }
   }, []);
 

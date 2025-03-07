@@ -29,10 +29,10 @@ const CalendarContext = createContext<CalendarContextType | undefined>(undefined
 const initialNotes: Note[] = [
   {
     id: '1',
-    title: 'Welcome to Calendar Notes',
-    content: 'This is a sample note to get you started.',
+    title: 'Takvim Notları\'na Hoş Geldiniz',
+    content: 'Başlamanız için örnek bir not.',
     date: new Date(),
-    tags: ['welcome'],
+    tags: ['hoşgeldin'],
     color: '#3498db',
     reminder: null,
     isPinned: true,
