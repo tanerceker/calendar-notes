@@ -43,7 +43,7 @@ const MonthView: React.FC<MonthViewProps> = ({ onOpenAddNote, onOpenEditNote }) 
   };
   
   return (
-    <div className="w-full h-full p-4 animate-in slide-in">
+    <div className="w-full h-full flex flex-col overflow-hidden animate-in slide-in">
       <div className="calendar-grid mb-1">
         {weekdays.map((day) => (
           <div 
@@ -55,7 +55,7 @@ const MonthView: React.FC<MonthViewProps> = ({ onOpenAddNote, onOpenEditNote }) 
         ))}
       </div>
       
-      <div className="calendar-grid gap-1">
+      <div className="calendar-grid gap-1 flex-1">
         {calendarData.weeks.flatMap(week => 
           week.days.map((day, dayIndex) => {
             const isSelected = day.date.getDate() === selectedDate.getDate() && 
@@ -66,7 +66,7 @@ const MonthView: React.FC<MonthViewProps> = ({ onOpenAddNote, onOpenEditNote }) 
               <div
                 key={`${day.date.toISOString()}-${dayIndex}`}
                 className={`
-                  relative h-24 p-1 rounded-md flex flex-col items-start transition-all duration-200
+                  relative h-full p-1 rounded-md flex flex-col items-start transition-all duration-200
                   ${day.isCurrentMonth ? 'bg-background hover:bg-secondary/50 cursor-pointer' : 'bg-muted/30 text-muted-foreground'}
                   ${day.isToday ? 'today-cell font-semibold border border-calendar-today' : ''}
                   ${isSelected ? 'ring-1 ring-primary' : ''}
