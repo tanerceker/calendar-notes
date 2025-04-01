@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { format } from 'date-fns';
+import { tr, enUS } from 'date-fns/locale';
 import { Note } from '@/types/calendar';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
@@ -16,7 +17,7 @@ interface DayViewProps {
 
 const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
   const { selectedDate, getNotesForDate, setSelectedNote, setSelectedDate } = useCalendar();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [notes, setNotes] = useState<Note[]>([]);
   const [isTimelineOpen, setIsTimelineOpen] = useState(true);
   
@@ -46,11 +47,14 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
   }, [setSelectedNote, onOpenEditNote]);
   
   const currentHour = useMemo(() => new Date().getHours(), []);
+  const dateLocale = locale === 'tr' ? tr : enUS;
   
   return (
     <div className="flex flex-col h-full animate-in slide-in">
       <div className="text-center p-4">
-        <h2 className="text-lg font-medium">{format(selectedDate, 'EEEE, MMMM d, yyyy')}</h2>
+        <h2 className="text-lg font-medium">
+          {format(selectedDate, 'EEEE, MMMM d, yyyy', { locale: dateLocale })}
+        </h2>
         <p className="text-sm text-muted-foreground">
           {notes.length} {notes.length === 1 ? 'note' : 'notes'} for today
         </p>
@@ -134,7 +138,9 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
       <Separator />
       
       <div className="p-4">
-        <h3 className="text-sm font-medium mb-3">{t('allNotesFor')} {format(selectedDate, 'MMMM d')}</h3>
+        <h3 className="text-sm font-medium mb-3">
+          {t('allNotesFor')} {format(selectedDate, 'MMMM d', { locale: dateLocale })}
+        </h3>
         
         {notes.length > 0 ? (
           <div className="space-y-3">
@@ -147,7 +153,7 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
                 <div className="flex items-start justify-between">
                   <h4 className="font-medium">{note.title}</h4>
                   <span className="text-xs text-muted-foreground">
-                    {format(new Date(note.date), 'h:mm a')}
+                    {format(new Date(note.date), 'h:mm a', { locale: dateLocale })}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-1 line-clamp-3">

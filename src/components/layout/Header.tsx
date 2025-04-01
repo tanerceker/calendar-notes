@@ -66,7 +66,7 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
   }, [setCurrentDate]);
 
   return (
-    <header className="flex items-center justify-between p-4 glass-effect sticky top-0 z-10 animate-in fade-in">
+    <header className="flex items-center justify-between p-2 glass-effect sticky top-0 z-10 animate-in fade-in">
       <div className="flex items-center space-x-2">
         <Calendar className="h-5 w-5 text-primary" />
         <h1 className="text-xl font-semibold text-balance">{t('calendarNotes')}</h1>

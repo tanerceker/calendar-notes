@@ -34,6 +34,24 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [selectedNote, setSelectedNote] = useState<Note | null>(null);
   const { t } = useLanguage();
   
+  // Create welcome note function
+  const createWelcomeNote = useCallback(() => {
+    const welcomeNote: Note = {
+      id: '1',
+      title: t('welcome'),
+      content: t('welcomeNote'),
+      date: new Date(),
+      tags: ['hoşgeldin', 'welcome'],
+      color: '#3498db',
+      reminder: null,
+      isPinned: true,
+      isCompleted: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    setNotes([welcomeNote]);
+  }, [t]);
+  
   // Load notes from localStorage on initial render
   useEffect(() => {
     const savedNotes = localStorage.getItem('calendarNotes');
@@ -56,25 +74,7 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       // If no notes exist, create the welcome note
       createWelcomeNote();
     }
-  }, []);
-  
-  // Create welcome note function
-  const createWelcomeNote = useCallback(() => {
-    const welcomeNote: Note = {
-      id: '1',
-      title: t('welcome'),
-      content: t('welcomeNote'),
-      date: new Date(),
-      tags: ['hoşgeldin', 'welcome'],
-      color: '#3498db',
-      reminder: null,
-      isPinned: true,
-      isCompleted: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    setNotes([welcomeNote]);
-  }, [t]);
+  }, [createWelcomeNote]);
   
   // Save notes to localStorage whenever they change
   useEffect(() => {

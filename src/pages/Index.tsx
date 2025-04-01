@@ -44,10 +44,10 @@ const CalendarApp: React.FC = () => {
     <div className="h-screen flex flex-col overflow-hidden">
       <Header onAddNote={handleAddNote} />
       
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 min-h-0">
         <ResizablePanelGroup direction="horizontal" className="h-full">
           <ResizablePanel defaultSize={70} minSize={40} className="h-full">
-            <div className="h-full overflow-auto">
+            <div className="h-full overflow-hidden">
               {calendarView}
             </div>
           </ResizablePanel>
