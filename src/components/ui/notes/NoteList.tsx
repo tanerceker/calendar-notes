@@ -74,9 +74,9 @@ const NoteList: React.FC = () => {
     return (
       <div className="h-full flex flex-col items-center justify-center p-6 text-center">
         <CalendarIcon className="h-12 w-12 text-muted-foreground mb-4" />
-        <h3 className="text-lg font-medium">{t('noNotesYet')}</h3>
+        <h3 className="text-lg font-medium">{t('noNotes')}</h3>
         <p className="text-sm text-muted-foreground mt-2 max-w-xs">
-          {t('createFirstNote')}
+          {t('clickAddNote')}
         </p>
       </div>
     );
@@ -181,9 +181,9 @@ const NoteList: React.FC = () => {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('areYouSure')}</AlertDialogTitle>
+            <AlertDialogTitle>{t('confirmDelete')}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t('actionCannotBeUndone')}
+              {t('deleteWarning')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
