@@ -152,7 +152,7 @@ const NoteList: React.FC = () => {
                               key={tag}
                               className="px-2 py-0.5 text-xs rounded-full bg-secondary text-secondary-foreground"
                             >
-                              {tag}
+                              {t(tag)}
                             </span>
                           ))}
                         </div>
@@ -183,7 +183,7 @@ const NoteList: React.FC = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>{t('confirmDelete')}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t('deleteWarning')}
+              {t('confirmDeleteMessage')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -45,7 +45,18 @@ export type TranslationKey =
   | 'confirmDelete'
   | 'confirmDeleteMessage'
   | 'welcome'
-  | 'welcomeNote';
+  | 'welcomeNote'
+  | 'createNote'
+  | 'updateNote'
+  | 'deleteWarning'
+  | 'clickAddNote'
+  | 'work'
+  | 'personal'
+  | 'important'
+  | 'meeting'
+  | 'reminder'
+  | 'idea'
+  | 'task';
 
 export const translations: {
   [key in Locale]: {
@@ -96,7 +107,18 @@ export const translations: {
     confirmDelete: 'Silmeyi Onayla',
     confirmDeleteMessage: 'Bu notu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
     welcome: 'Hoş Geldiniz',
-    welcomeNote: 'Takvim Notları uygulamasına hoş geldiniz! Başlamak için bir not ekleyin.'
+    welcomeNote: 'Takvim Notları uygulamasına hoş geldiniz! Başlamak için bir not ekleyin.',
+    createNote: 'Not oluştur',
+    updateNote: 'Notu güncelle',
+    deleteWarning: 'Bu notu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
+    clickAddNote: 'Bir not eklemek için tıklayın',
+    work: 'iş',
+    personal: 'kişisel',
+    important: 'önemli',
+    meeting: 'toplantı',
+    reminder: 'hatırlatıcı',
+    idea: 'fikir',
+    task: 'görev'
   },
   en: {
     calendarNotes: 'Calendar Notes',
@@ -142,6 +164,17 @@ export const translations: {
     confirmDelete: 'Confirm Delete',
     confirmDeleteMessage: 'Are you sure you want to delete this note? This action cannot be undone.',
     welcome: 'Welcome',
-    welcomeNote: 'Welcome to Calendar Notes! Add a note to get started.'
+    welcomeNote: 'Welcome to Calendar Notes! Add a note to get started.',
+    createNote: 'Create a note',
+    updateNote: 'Update note',
+    deleteWarning: 'Are you sure you want to delete this note? This action cannot be undone.',
+    clickAddNote: 'Click to add a note',
+    work: 'work',
+    personal: 'personal',
+    important: 'important',
+    meeting: 'meeting',
+    reminder: 'reminder',
+    idea: 'idea',
+    task: 'task'
   }
 };
