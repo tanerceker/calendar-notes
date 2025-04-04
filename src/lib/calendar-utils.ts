@@ -63,12 +63,24 @@ export function getMonthName(date: Date, locale: 'tr' | 'en' = 'en', format: 'lo
 
 export function getFormattedDate(date: Date, locale: 'tr' | 'en' = 'en'): string {
   const dateLocale = locale === 'tr' ? tr : enUS;
-  return format(date, 'PPP', { locale: dateLocale });
+  if (locale === 'tr') {
+    // Turkish date format (e.g., "7 Mart 2025")
+    return format(date, 'd MMMM yyyy', { locale: dateLocale });
+  } else {
+    // English date format (e.g., "March 7, 2025")
+    return format(date, 'PPP', { locale: dateLocale });
+  }
 }
 
 export function getFormattedDateTime(date: Date, locale: 'tr' | 'en' = 'en'): string {
   const dateLocale = locale === 'tr' ? tr : enUS;
-  return format(date, 'PPpp', { locale: dateLocale });
+  if (locale === 'tr') {
+    // Turkish date and time format (e.g., "7 Mart 2025 12:09")
+    return format(date, 'd MMMM yyyy HH:mm', { locale: dateLocale });
+  } else {
+    // English date and time format (e.g., "March 7, 2025 12:09 AM")
+    return format(date, 'PPpp', { locale: dateLocale });
+  }
 }
 
 export function getFormattedTime(date: Date, locale: 'tr' | 'en' = 'en'): string {
