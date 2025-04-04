@@ -5,6 +5,7 @@ import { startOfWeek, addDays, format, isSameDay } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { Note } from '@/types/calendar';
 import { useLanguage } from '@/context/LanguageContext';
+import { getFormattedTime } from '@/lib/calendar-utils';
 
 interface WeekViewProps {
   onOpenAddNote: (open: boolean) => void;
@@ -57,6 +58,16 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
   
   const dateLocale = locale === 'tr' ? tr : enUS;
   
+  const formatHour = (hour: number): string => {
+    if (locale === 'tr') {
+      // 24-hour format for Turkish
+      return `${hour}:00`;
+    } else {
+      // 12-hour format for English
+      return hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`;
+    }
+  };
+  
   return (
     <div className="w-full h-full overflow-auto hide-scrollbar animate-in slide-in">
       <div className="sticky top-0 z-10 bg-background flex">
@@ -87,7 +98,7 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
         {hours.map((hour) => (
           <div key={hour} className="flex h-16 border-t border-border">
             <div className="w-16 shrink-0 pr-2 text-xs text-right text-muted-foreground flex items-start pt-1">
-              {hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`}
+              {formatHour(hour)}
             </div>
             
             {weekDays.map((day) => {
