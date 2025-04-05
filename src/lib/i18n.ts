@@ -56,7 +56,15 @@ export type TranslationKey =
   | 'meeting'
   | 'reminder'
   | 'idea'
-  | 'task';
+  | 'task'
+  | 'year'  
+  | 'selectYear'
+  | 'selectMonth'
+  | 'markComplete'
+  | 'markIncomplete'
+  | 'edit'
+  | 'pin'
+  | 'unpin';
 
 export const translations: {
   [key in Locale]: {
@@ -118,7 +126,15 @@ export const translations: {
     meeting: 'toplantı',
     reminder: 'hatırlatıcı',
     idea: 'fikir',
-    task: 'görev'
+    task: 'görev',
+    year: 'Yıl',
+    selectYear: 'Yıl seçin',
+    selectMonth: 'Ay seçin',
+    markComplete: 'Tamamlandı olarak işaretle',
+    markIncomplete: 'Tamamlanmadı olarak işaretle',
+    edit: 'Düzenle',
+    pin: 'Sabitle',
+    unpin: 'Sabitliği kaldır'
   },
   en: {
     calendarNotes: 'Calendar Notes',
@@ -175,6 +191,14 @@ export const translations: {
     meeting: 'meeting',
     reminder: 'reminder',
     idea: 'idea',
-    task: 'task'
+    task: 'task',
+    year: 'Year',
+    selectYear: 'Select Year',
+    selectMonth: 'Select Month',
+    markComplete: 'Mark as Complete',
+    markIncomplete: 'Mark as Incomplete',
+    edit: 'Edit',
+    pin: 'Pin',
+    unpin: 'Unpin'
   }
 };
