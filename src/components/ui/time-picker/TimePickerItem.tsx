@@ -19,9 +19,14 @@ const TimePickerItem: React.FC<TimePickerItemProps> = ({
   onClick,
   dataAttr,
 }) => {
+  // Create dynamic data attribute object
+  const dataAttributes = {
+    [`data-${dataAttr.key}`]: dataAttr.value
+  };
+
   return (
     <Button
-      data-{dataAttr.key}={dataAttr.value}
+      {...dataAttributes}
       variant={isSelected ? "default" : "ghost"}
       className={cn(
         "my-1 rounded-md",

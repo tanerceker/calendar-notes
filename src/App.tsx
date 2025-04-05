@@ -8,9 +8,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 
-// Lazy load page components
-const Index = lazy(() => import("./pages/Index"));
-const NotFound = lazy(() => import("./pages/NotFound"));
+// Import pages directly instead of lazy loading to avoid potential issues
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
 
 // Create QueryClient instance
 const queryClient = new QueryClient({
@@ -22,12 +22,6 @@ const queryClient = new QueryClient({
   },
 });
 
-const LoadingFallback = () => (
-  <div className="h-screen w-full flex items-center justify-center">
-    <div className="animate-pulse text-primary">Loading...</div>
-  </div>
-);
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
@@ -36,12 +30,10 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Suspense fallback={<LoadingFallback />}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </BrowserRouter>
         </TooltipProvider>
       </LanguageProvider>
