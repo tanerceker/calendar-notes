@@ -120,17 +120,15 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
                 {time || "--:--"}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-3 pointer-events-auto">
-              <div className="flex flex-col space-y-4">
-                <TimePicker value={time} onChange={handleTimeChange} />
-                <Button 
-                  size="sm" 
-                  onClick={() => setTimePickerOpen(false)}
-                  className="self-end"
-                >
-                  {t('save')}
-                </Button>
-              </div>
+            <PopoverContent className="w-auto p-3 pointer-events-auto" align="start">
+              <TimePicker 
+                value={time} 
+                onChange={(newTime) => {
+                  handleTimeChange(newTime);
+                  // Auto-close the popover after selection
+                  setTimePickerOpen(false);
+                }} 
+              />
             </PopoverContent>
           </Popover>
         </div>
