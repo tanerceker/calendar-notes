@@ -5,6 +5,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { Pencil, Trash2, PinIcon, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getFormattedDateTime } from '@/lib/calendar-utils';
+import { TranslationKey } from '@/types/translations';
 
 interface NoteItemProps {
   note: Note;
@@ -90,7 +91,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
                       key={tag}
                       className="px-2 py-0.5 text-xs rounded-full bg-secondary text-secondary-foreground"
                     >
-                      {t(tag)}
+                      {t(tag as TranslationKey)}
                     </span>
                   ))}
                 </div>
