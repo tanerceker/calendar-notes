@@ -4,7 +4,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { CalendarIcon, Clock, X } from 'lucide-react';
+import { CalendarIcon, Clock } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
@@ -41,6 +41,7 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
   
   const handleTimeChange = (newTime: string) => {
     setTime(newTime);
+    // Don't automatically close the popover to allow multiple selections
   };
 
   return (
@@ -115,11 +116,19 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
                 )}
               >
                 <Clock className="mr-2 h-4 w-4" />
-                {time}
+                {time || "--:--"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-3 pointer-events-auto">
-              <TimePicker value={time} onChange={handleTimeChange} />
+              <div className="flex flex-col space-y-4">
+                <TimePicker value={time} onChange={handleTimeChange} />
+                <Button 
+                  size="sm" 
+                  onClick={() => setTimePickerOpen(false)}
+                >
+                  {t('save')}
+                </Button>
+              </div>
             </PopoverContent>
           </Popover>
         </div>
