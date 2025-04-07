@@ -43,7 +43,6 @@ export const translations: {
     noNotes: 'Bu gün için not bulunmuyor',
     allNotesFor: 'Şu tarih için tüm notlar',
     currentHour: 'Şu anki saat - Not yok',
-    pickDate: 'Tarih seçin',
     timeline: 'Zaman Çizelgesi',
     loading: 'Yükleniyor...',
     moreNotes: 'daha fazla',
@@ -89,7 +88,8 @@ export const translations: {
     dateCreated: 'Oluşturulma Tarihi',
     priority: 'Öncelik',
     selectTags: 'Etiketleri Seç',
-    createNewTag: 'Yeni Etiket Oluştur'
+    createNewTag: 'Yeni Etiket Oluştur',
+    update: 'Güncelle'
   },
   en: {
     calendarNotes: 'Calendar Notes',
@@ -126,7 +126,6 @@ export const translations: {
     noNotes: 'No notes for this day',
     allNotesFor: 'All Notes for',
     currentHour: 'Current hour - No notes',
-    pickDate: 'Pick a date',
     timeline: 'Timeline',
     loading: 'Loading...',
     moreNotes: 'more',
@@ -172,6 +171,7 @@ export const translations: {
     dateCreated: 'Date Created',
     priority: 'Priority',
     selectTags: 'Select Tags',
-    createNewTag: 'Create New Tag'
+    createNewTag: 'Create New Tag',
+    update: 'Update'
   }
 };

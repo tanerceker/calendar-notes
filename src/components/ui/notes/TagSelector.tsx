@@ -29,25 +29,8 @@ const TagSelector: React.FC<TagSelectorProps> = ({
   return (
     <div className="grid gap-2">
       <label className="text-sm font-medium">{t('tags')}</label>
-      <div className="flex flex-wrap gap-2 mb-2">
-        {tags.map((tag) => (
-          <div 
-            key={tag}
-            className="flex items-center px-3 py-1 text-xs rounded-full bg-secondary text-secondary-foreground gap-1"
-          >
-            <span>{t(tag as TranslationKey)}</span>
-            <button 
-              type="button" 
-              onClick={() => onRemoveTag(tag)}
-              className="h-4 w-4 rounded-full hover:bg-secondary-foreground/20 flex items-center justify-center"
-            >
-              <X className="h-3 w-3" />
-            </button>
-          </div>
-        ))}
-      </div>
       <Select onValueChange={onAddTag}>
-        <SelectTrigger className="focus-ring">
+        <SelectTrigger className="focus-ring mb-2">
           <SelectValue placeholder={t('addTag')} />
         </SelectTrigger>
         <SelectContent>
@@ -61,6 +44,25 @@ const TagSelector: React.FC<TagSelectorProps> = ({
           }
         </SelectContent>
       </Select>
+      
+      <div className="flex flex-wrap gap-2 min-h-[32px]">
+        {tags.map((tag) => (
+          <div 
+            key={tag}
+            className="flex items-center px-3 py-1 text-xs rounded-full bg-secondary text-secondary-foreground gap-1 transition-colors hover:bg-secondary/80"
+          >
+            <span>{t(tag as TranslationKey)}</span>
+            <button 
+              type="button" 
+              onClick={() => onRemoveTag(tag)}
+              className="h-4 w-4 rounded-full hover:bg-secondary-foreground/20 flex items-center justify-center"
+              aria-label={`Remove ${t(tag as TranslationKey)} tag`}
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 
 import React, { useEffect } from 'react';
-import { parseTimeString } from '@/lib/calendar-utils';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import TimePickerColumn from './TimePickerColumn';
@@ -29,9 +28,9 @@ const TimePicker: React.FC<TimePickerProps> = ({
     handleMinuteClick 
   } = useTimePicker(value, minuteStep);
   
-  // Update parent value when hour or minute changes
+  // Update parent value when hour or minute changes in a safe way
   useEffect(() => {
-    if (selectedHour && selectedMinute) {
+    if (selectedHour && selectedMinute && onChange) {
       onChange(`${selectedHour}:${selectedMinute}`);
     }
   }, [selectedHour, selectedMinute, onChange]);
@@ -40,7 +39,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
   const minuteTitle = locale === 'tr' ? 'Dakika' : 'Minute';
 
   return (
-    <div className={cn("flex gap-2", className)}>
+    <div className={cn("flex gap-4", className)}>
       <TimePickerColumn
         title={hourTitle}
         items={hours}
