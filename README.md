@@ -1,5 +1,5 @@
 
-# Calendar Notes Haven
+# Calendar Notes Haven - Takvim Not Uygulaması
 
 Bu proje, etkinlik ve not takibi yapmak için kullanılan bir takvim uygulamasıdır.
 
@@ -83,25 +83,3 @@ src/
   ├── pages/              # Sayfa bileşenleri
   └── types/              # TypeScript tip tanımlamaları
 ```
-
-## Yapılan Geliştirmeler
-
-### Takvim Bileşenleri
-- Takvim görünüm modları (gün, hafta, ay) oluşturuldu
-- Takvimde tarih seçimi ve gezinme özellikleri eklendi
-
-### Not Yönetimi
-- Not ekleme, düzenleme ve silme işlemleri için diyalog formları oluşturuldu
-- Notları etiketleme ve renk kodlama özellikleri eklendi
-
-### Zaman Seçici
-- Kullanıcı dostu saat ve dakika seçim bileşeni geliştirildi
-- Saat ve dakika seçimleri tamamlandıktan sonra seçim arayüzünün otomatik kapanması sağlandı
-
-### Çoklu Dil Desteği
-- Türkçe ve İngilizce dil seçenekleri eklendi
-- Dil değiştirme fonksiyonu uygulandı
-
-### Tema Değiştirme
-- Karanlık ve aydınlık tema seçenekleri eklendi
-- Kullanıcı tema tercihlerinin saklanması sağlandı
