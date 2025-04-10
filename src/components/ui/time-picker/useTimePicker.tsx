@@ -2,11 +2,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getHoursArray, getMinutesArray, parseTimeString } from '@/lib/calendar-utils';
 
-export const useTimePicker = (initialValue: string, minuteStep: number = 5, onChange?: (value: string) => void) => {
+export const useTimePicker = (
+  initialValue: string, 
+  minuteStep: number = 5, 
+  onChange?: (value: string, completed?: boolean) => void
+) => {
   const { hours: initialHours, minutes: initialMinutes } = parseTimeString(initialValue);
   
   const [selectedHour, setSelectedHour] = useState<string>(initialHours);
   const [selectedMinute, setSelectedMinute] = useState<string>(initialMinutes);
+  const [previousHour, setPreviousHour] = useState<string | null>(null);
   
   const hours = getHoursArray();
   const minutes = getMinutesArray(minuteStep);
@@ -41,18 +46,24 @@ export const useTimePicker = (initialValue: string, minuteStep: number = 5, onCh
   }, [selectedHour, selectedMinute]);
   
   const handleHourClick = useCallback((hour: string) => {
+    setPreviousHour(selectedHour);
     setSelectedHour(hour);
-    // Update parent when hour changes, but don't close the picker
+    
+    // Update parent when hour changes, but don't close the picker yet
     if (onChange && hour && selectedMinute) {
-      onChange(`${hour}:${selectedMinute}`);
+      const hourJustChanged = hour !== selectedHour;
+      const timeCompleted = hour !== null && selectedMinute !== null && previousHour !== null;
+      onChange(`${hour}:${selectedMinute}`, timeCompleted && hourJustChanged);
     }
-  }, [selectedMinute, onChange]);
+  }, [selectedHour, selectedMinute, previousHour, onChange]);
   
   const handleMinuteClick = useCallback((minute: string) => {
     setSelectedMinute(minute);
-    // Update parent when minute changes, but don't close the picker
+    
+    // Update parent when minute changes and consider closing if hour was already selected
     if (onChange && selectedHour && minute) {
-      onChange(`${selectedHour}:${minute}`);
+      const timeCompleted = selectedHour !== null && minute !== null;
+      onChange(`${selectedHour}:${minute}`, timeCompleted);
     }
   }, [selectedHour, onChange]);
   

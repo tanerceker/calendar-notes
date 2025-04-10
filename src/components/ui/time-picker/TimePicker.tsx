@@ -7,7 +7,7 @@ import { useTimePicker } from './useTimePicker';
 
 interface TimePickerProps {
   value: string; // "HH:mm" format
-  onChange: (value: string) => void;
+  onChange: (value: string, completed?: boolean) => void;
   minuteStep?: number;
   className?: string;
 }
