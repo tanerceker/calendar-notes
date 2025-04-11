@@ -6,6 +6,7 @@ import { tr, enUS } from 'date-fns/locale';
 import { Note } from '@/types/calendar';
 import { useLanguage } from '@/context/LanguageContext';
 import { getFormattedTime } from '@/lib/calendar-utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface WeekViewProps {
   onOpenAddNote: (open: boolean) => void;
@@ -69,7 +70,7 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
   };
   
   return (
-    <div className="w-full h-full overflow-auto hide-scrollbar animate-in slide-in">
+    <div className="w-full h-full flex flex-col overflow-hidden animate-in slide-in">
       <div className="sticky top-0 z-10 bg-background flex">
         <div className="w-16 shrink-0"></div>
         {weekDays.map((day) => {
@@ -94,48 +95,50 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
         })}
       </div>
       
-      <div className="relative">
-        {hours.map((hour) => (
-          <div key={hour} className="flex h-16 border-t border-border">
-            <div className="w-16 shrink-0 pr-2 text-xs text-right text-muted-foreground flex items-start pt-1">
-              {formatHour(hour)}
-            </div>
-            
-            {weekDays.map((day) => {
-              const notesForHour = getNotesForHour(day, hour);
-              const isCurrentHour = new Date().getHours() === hour && isSameDay(day, new Date());
+      <ScrollArea className="flex-1 overflow-y-auto">
+        <div className="relative min-h-[1500px]">
+          {hours.map((hour) => (
+            <div key={hour} className="flex h-16 border-t border-border">
+              <div className="w-16 shrink-0 pr-2 text-xs text-right text-muted-foreground flex items-start pt-1 sticky left-0 bg-background z-10">
+                {formatHour(hour)}
+              </div>
               
-              return (
-                <div 
-                  key={`${day.toISOString()}-${hour}`}
-                  className={`
-                    flex-1 border-l border-border p-1 relative cursor-pointer
-                    ${isCurrentHour ? 'bg-blue-50 dark:bg-blue-950/20' : ''}
-                    hover:bg-secondary/30
-                  `}
-                  onClick={() => handleCellClick(day, hour)}
-                  onDoubleClick={() => handleCellDoubleClick(day, hour)}
-                >
-                  {notesForHour.map((note) => (
-                    <div 
-                      key={note.id}
-                      className="text-xs p-1 mb-1 rounded truncate transition-opacity hover:opacity-90 cursor-pointer"
-                      style={{ 
-                        backgroundColor: note.color || '#3498db', 
-                        color: 'white'
-                      }}
-                      title={note.title}
-                      onClick={(e) => handleNoteClick(e, note)}
-                    >
-                      {note.title}
-                    </div>
-                  ))}
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
+              {weekDays.map((day) => {
+                const notesForHour = getNotesForHour(day, hour);
+                const isCurrentHour = new Date().getHours() === hour && isSameDay(day, new Date());
+                
+                return (
+                  <div 
+                    key={`${day.toISOString()}-${hour}`}
+                    className={`
+                      flex-1 border-l border-border p-1 relative cursor-pointer
+                      ${isCurrentHour ? 'bg-blue-50 dark:bg-blue-950/20' : ''}
+                      hover:bg-secondary/30
+                    `}
+                    onClick={() => handleCellClick(day, hour)}
+                    onDoubleClick={() => handleCellDoubleClick(day, hour)}
+                  >
+                    {notesForHour.map((note) => (
+                      <div 
+                        key={note.id}
+                        className="text-xs p-1 mb-1 rounded truncate transition-opacity hover:opacity-90 cursor-pointer"
+                        style={{ 
+                          backgroundColor: note.color || '#3498db', 
+                          color: 'white'
+                        }}
+                        title={note.title}
+                        onClick={(e) => handleNoteClick(e, note)}
+                      >
+                        {note.title}
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
     </div>
   );
 };
