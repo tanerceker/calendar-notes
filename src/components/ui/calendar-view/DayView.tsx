@@ -85,14 +85,14 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
         
         <CollapsibleContent className="flex-1">
           <ScrollArea className="h-[calc(100vh-240px)]">
-            <div className="space-y-1 p-2">
+            <div className="space-y-1 p-2 pb-10">
               {hours.map((hour) => {
                 const hourNotes = getNotesForHour(hour);
                 const isCurrentHour = hour === currentHour;
                 
                 return (
                   <div 
-                    key={hour} 
+                    key={`day-hour-${hour}`} 
                     className="flex"
                   >
                     <div 
