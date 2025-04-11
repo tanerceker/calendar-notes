@@ -1,3 +1,4 @@
+
 import React, { useCallback } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Input } from '@/components/ui/input';
@@ -10,6 +11,7 @@ import { cn } from '@/lib/utils';
 import { tr, enUS } from 'date-fns/locale';
 import { getFormattedDate } from '@/lib/calendar-utils';
 import TimePicker from '@/components/ui/time-picker/TimePicker';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface NoteFormFieldsProps {
   title: string;
@@ -37,6 +39,7 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
   setTimePickerOpen
 }) => {
   const { t, locale } = useLanguage();
+  const isMobile = useIsMobile();
   
   const handleTimeChange = useCallback((newTime: string, completed: boolean) => {
     setTime(newTime);
@@ -48,8 +51,8 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
   }, [setTime, setTimePickerOpen]);
 
   return (
-    <div className="grid gap-4">
-      <div className="grid gap-2">
+    <div className="grid gap-3 md:gap-4">
+      <div className="grid gap-1 md:gap-2">
         <label htmlFor="title" className="text-sm font-medium">
           {t('title')}
         </label>
@@ -63,7 +66,7 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
         />
       </div>
       
-      <div className="grid gap-2">
+      <div className="grid gap-1 md:gap-2">
         <label htmlFor="content" className="text-sm font-medium">
           {t('content')}
         </label>
@@ -72,12 +75,12 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
           placeholder={t('content')}
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="min-h-[100px] focus-ring"
+          className="min-h-[80px] md:min-h-[100px] focus-ring"
         />
       </div>
       
-      <div className="grid grid-cols-2 gap-4">
-        <div className="grid gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+        <div className="grid gap-1 md:gap-2">
           <label className="text-sm font-medium">{t('date')}</label>
           <Popover>
             <PopoverTrigger asChild>
@@ -92,7 +95,7 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
                 {date ? getFormattedDate(date, locale) : <span>{t('date')}</span>}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 pointer-events-auto">
+            <PopoverContent className="w-auto p-0 pointer-events-auto" align={isMobile ? "center" : "start"}>
               <Calendar
                 mode="single"
                 selected={date}
@@ -105,7 +108,7 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
           </Popover>
         </div>
         
-        <div className="grid gap-2">
+        <div className="grid gap-1 md:gap-2">
           <label htmlFor="time" className="text-sm font-medium">
             {t('time')}
           </label>
@@ -122,7 +125,7 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
                 {time || "--:--"}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-3 pointer-events-auto" align="start">
+            <PopoverContent className="w-auto p-2 md:p-3 pointer-events-auto" align={isMobile ? "center" : "start"}>
               <TimePicker 
                 value={time} 
                 onChange={handleTimeChange}

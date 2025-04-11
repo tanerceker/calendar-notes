@@ -8,11 +8,14 @@ import DayView from '@/components/ui/calendar-view/DayView';
 import NoteDialog from '@/components/ui/notes/NoteDialog';
 import NoteList from '@/components/ui/notes/NoteList';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const CalendarApp: React.FC = () => {
   const { calendarMode, selectedNote, selectedDate } = useCalendar();
   const [isAddNoteOpen, setIsAddNoteOpen] = useState(false);
   const [isEditNoteOpen, setIsEditNoteOpen] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
+  const isMobile = useIsMobile();
   
   const handleAddNote = useCallback(() => {
     setIsAddNoteOpen(true);
@@ -40,6 +43,49 @@ const CalendarApp: React.FC = () => {
     }
   }, [calendarMode, setIsAddNoteOpen, setIsEditNoteOpen]);
   
+  // For mobile, we'll use a different layout
+  if (isMobile) {
+    return (
+      <div className="h-full flex flex-col overflow-hidden">
+        <Header onAddNote={handleAddNote} />
+        
+        <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
+          <div className="flex justify-center py-2">
+            <button
+              onClick={() => setShowNotes(!showNotes)}
+              className="text-sm font-medium bg-primary text-primary-foreground px-3 py-1 rounded-full"
+            >
+              {showNotes ? 'Show Calendar' : 'Show Notes'}
+            </button>
+          </div>
+          
+          <div className={`flex-1 ${showNotes ? 'hidden' : 'block'}`}>
+            {calendarView}
+          </div>
+          
+          <div className={`flex-1 ${showNotes ? 'block' : 'hidden'}`}>
+            <NoteList />
+          </div>
+        </div>
+        
+        <NoteDialog 
+          open={isAddNoteOpen}
+          onOpenChange={setIsAddNoteOpen}
+          mode="add"
+          preSelectedTime={selectedDate}
+        />
+        
+        <NoteDialog 
+          open={isEditNoteOpen && selectedNote !== null}
+          onOpenChange={handleEditNoteClose}
+          note={selectedNote}
+          mode="edit"
+        />
+      </div>
+    );
+  }
+  
+  // For tablet and desktop
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <Header onAddNote={handleAddNote} />
