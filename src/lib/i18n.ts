@@ -172,6 +172,8 @@ export const translations: {
     dateCreated: 'Date Created',
     priority: 'Priority',
     selectTags: 'Select Tags',
-    createNewTag: 'Create New Tag'
+    createNewTag: 'Create New Tag',
+    showCalendar: 'Show Calendar',
+    showNotes: 'Show Notes'
   }
 };
