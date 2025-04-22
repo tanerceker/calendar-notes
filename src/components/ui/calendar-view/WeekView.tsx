@@ -1,8 +1,9 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { startOfWeek, addDays, format, isSameDay } from 'date-fns';
 import { Note } from '@/types/calendar';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface WeekViewProps {
   onOpenAddNote: (open: boolean) => void;
@@ -12,6 +13,7 @@ interface WeekViewProps {
 const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
   const { currentDate, selectedDate, setSelectedDate, getNotesForDate, setSelectedNote } = useCalendar();
   const [weekDays, setWeekDays] = useState<Date[]>([]);
+  const { t } = useLanguage();
   
   useEffect(() => {
     const start = startOfWeek(currentDate, { weekStartsOn: 1 });
@@ -19,34 +21,38 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
     setWeekDays(days);
   }, [currentDate]);
   
-  const hours = Array.from({ length: 24 }, (_, i) => i);
+  const hours = useMemo(() => Array.from({ length: 24 }, (_, i) => i), []);
   
-  const getNotesForHour = (date: Date, hour: number): Note[] => {
+  const getNotesForHour = useCallback((date: Date, hour: number): Note[] => {
     const dayNotes = getNotesForDate(date);
     return dayNotes.filter(note => {
       const noteDate = new Date(note.date);
       return noteDate.getHours() === hour;
     });
-  };
+  }, [getNotesForDate]);
   
-  const handleCellClick = (date: Date, hour: number) => {
+  const handleCellClick = useCallback((date: Date, hour: number) => {
     const newDate = new Date(date);
     newDate.setHours(hour);
     setSelectedDate(newDate);
-  };
+  }, [setSelectedDate]);
   
-  const handleCellDoubleClick = (date: Date, hour: number) => {
+  const handleCellDoubleClick = useCallback((date: Date, hour: number) => {
     const newDate = new Date(date);
     newDate.setHours(hour);
     setSelectedDate(newDate);
     onOpenAddNote(true);
-  };
+  }, [setSelectedDate, onOpenAddNote]);
   
-  const handleNoteClick = (e: React.MouseEvent, note: Note) => {
+  const handleNoteClick = useCallback((e: React.MouseEvent, note: Note) => {
     e.stopPropagation();
     setSelectedNote(note);
     onOpenEditNote(true);
-  };
+  }, [setSelectedNote, onOpenEditNote]);
+  
+  if (weekDays.length === 0) {
+    return <div className="h-full flex items-center justify-center">{t('loading')}</div>;
+  }
   
   return (
     <div className="w-full h-full overflow-auto hide-scrollbar animate-in slide-in">
@@ -120,4 +126,4 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
   );
 };
 
-export default WeekView;
+export default React.memo(WeekView);

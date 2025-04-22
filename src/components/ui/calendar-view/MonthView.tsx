@@ -1,10 +1,10 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { generateCalendarMonth } from '@/lib/calendar-utils';
 import { format } from 'date-fns';
 import { CalendarMonth } from '@/types/calendar';
-import NoteDot from '@/components/ui/notes/NoteDot';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface MonthViewProps {
   onOpenAddNote: (open: boolean) => void;
@@ -14,33 +14,33 @@ interface MonthViewProps {
 const MonthView: React.FC<MonthViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
   const { currentDate, selectedDate, setSelectedDate, notes, setSelectedNote } = useCalendar();
   const [calendarData, setCalendarData] = useState<CalendarMonth | null>(null);
-  const [animationDirection, setAnimationDirection] = useState<'left' | 'right' | null>(null);
+  const { t } = useLanguage();
   
   useEffect(() => {
     const data = generateCalendarMonth(currentDate, notes);
     setCalendarData(data);
   }, [currentDate, notes]);
   
-  const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const weekdays = useMemo(() => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], []);
   
-  if (!calendarData) {
-    return <div className="h-full flex items-center justify-center">Loading calendar...</div>;
-  }
-  
-  const handleDateClick = (date: Date) => {
+  const handleDateClick = useCallback((date: Date) => {
     setSelectedDate(date);
-  };
+  }, [setSelectedDate]);
   
-  const handleDateDoubleClick = (date: Date) => {
+  const handleDateDoubleClick = useCallback((date: Date) => {
     setSelectedDate(date);
     onOpenAddNote(true);
-  };
+  }, [setSelectedDate, onOpenAddNote]);
   
-  const handleNoteClick = (e: React.MouseEvent, note: any) => {
+  const handleNoteClick = useCallback((e: React.MouseEvent, note: any) => {
     e.stopPropagation(); // Prevent triggering cell click
     setSelectedNote(note);
     onOpenEditNote(true);
-  };
+  }, [setSelectedNote, onOpenEditNote]);
+  
+  if (!calendarData) {
+    return <div className="h-full flex items-center justify-center">{t('loading')}</div>;
+  }
   
   return (
     <div className="w-full h-full flex flex-col overflow-hidden animate-in slide-in">
@@ -92,7 +92,7 @@ const MonthView: React.FC<MonthViewProps> = ({ onOpenAddNote, onOpenEditNote }) 
                   
                   {day.notes.length > 3 && (
                     <div className="text-xs text-muted-foreground px-1.5">
-                      {day.notes.length - 3} more
+                      {day.notes.length - 3} {t('moreNotes')}
                     </div>
                   )}
                 </div>
@@ -105,4 +105,4 @@ const MonthView: React.FC<MonthViewProps> = ({ onOpenAddNote, onOpenEditNote }) 
   );
 };
 
-export default MonthView;
+export default React.memo(MonthView);

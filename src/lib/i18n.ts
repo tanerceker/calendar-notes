@@ -37,15 +37,21 @@ export type TranslationKey =
   | 'allNotesFor'
   | 'currentHour'
   | 'pickDate'
-  | 'timeline';
+  | 'timeline'
+  | 'loading'
+  | 'moreNotes'
+  | 'today'
+  | 'delete'
+  | 'confirmDelete'
+  | 'confirmDeleteMessage'
+  | 'welcome'
+  | 'welcomeNote';
 
-type Translations = {
+export const translations: {
   [key in Locale]: {
     [key in TranslationKey]: string;
   };
-};
-
-export const translations: Translations = {
+} = {
   tr: {
     calendarNotes: 'Takvim Notları',
     addNote: 'Not Ekle',
@@ -82,7 +88,15 @@ export const translations: Translations = {
     allNotesFor: 'Şu tarih için tüm notlar',
     currentHour: 'Şu anki saat - Not yok',
     pickDate: 'Tarih seçin',
-    timeline: 'Zaman Çizelgesi'
+    timeline: 'Zaman Çizelgesi',
+    loading: 'Yükleniyor...',
+    moreNotes: 'daha fazla',
+    today: 'Bugün',
+    delete: 'Sil',
+    confirmDelete: 'Silmeyi Onayla',
+    confirmDeleteMessage: 'Bu notu silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.',
+    welcome: 'Hoş Geldiniz',
+    welcomeNote: 'Takvim Notları uygulamasına hoş geldiniz! Başlamak için bir not ekleyin.'
   },
   en: {
     calendarNotes: 'Calendar Notes',
@@ -120,6 +134,14 @@ export const translations: Translations = {
     allNotesFor: 'All Notes for',
     currentHour: 'Current hour - No notes',
     pickDate: 'Pick a date',
-    timeline: 'Timeline'
+    timeline: 'Timeline',
+    loading: 'Loading...',
+    moreNotes: 'more',
+    today: 'Today',
+    delete: 'Delete',
+    confirmDelete: 'Confirm Delete',
+    confirmDeleteMessage: 'Are you sure you want to delete this note? This action cannot be undone.',
+    welcome: 'Welcome',
+    welcomeNote: 'Welcome to Calendar Notes! Add a note to get started.'
   }
 };
