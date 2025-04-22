@@ -10,8 +10,9 @@ import NoteList from '@/components/ui/notes/NoteList';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
 const CalendarApp: React.FC = () => {
-  const { calendarMode } = useCalendar();
+  const { calendarMode, selectedNote } = useCalendar();
   const [isAddNoteOpen, setIsAddNoteOpen] = useState(false);
+  const [isEditNoteOpen, setIsEditNoteOpen] = useState(false);
   
   const handleAddNote = () => {
     setIsAddNoteOpen(true);
@@ -25,9 +26,9 @@ const CalendarApp: React.FC = () => {
         <ResizablePanelGroup direction="horizontal">
           <ResizablePanel defaultSize={70} minSize={40}>
             <div className="h-full overflow-auto">
-              {calendarMode === 'month' && <MonthView />}
-              {calendarMode === 'week' && <WeekView />}
-              {calendarMode === 'day' && <DayView />}
+              {calendarMode === 'month' && <MonthView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />}
+              {calendarMode === 'week' && <WeekView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />}
+              {calendarMode === 'day' && <DayView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />}
             </div>
           </ResizablePanel>
           
@@ -45,6 +46,20 @@ const CalendarApp: React.FC = () => {
         open={isAddNoteOpen}
         onOpenChange={setIsAddNoteOpen}
         mode="add"
+      />
+      
+      <NoteDialog 
+        open={isEditNoteOpen && selectedNote !== null}
+        onOpenChange={(open) => {
+          setIsEditNoteOpen(open);
+          if (!open) {
+            // When closing, clear the selected note
+            const { setSelectedNote } = useCalendar();
+            setSelectedNote(null);
+          }
+        }}
+        note={selectedNote}
+        mode="edit"
       />
     </div>
   );

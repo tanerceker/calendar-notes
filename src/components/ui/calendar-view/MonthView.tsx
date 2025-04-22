@@ -6,8 +6,13 @@ import { format } from 'date-fns';
 import { CalendarMonth } from '@/types/calendar';
 import NoteDot from '@/components/ui/notes/NoteDot';
 
-const MonthView: React.FC = () => {
-  const { currentDate, selectedDate, setSelectedDate, notes } = useCalendar();
+interface MonthViewProps {
+  onOpenAddNote: (open: boolean) => void;
+  onOpenEditNote: (open: boolean) => void;
+}
+
+const MonthView: React.FC<MonthViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
+  const { currentDate, selectedDate, setSelectedDate, notes, setSelectedNote } = useCalendar();
   const [calendarData, setCalendarData] = useState<CalendarMonth | null>(null);
   const [animationDirection, setAnimationDirection] = useState<'left' | 'right' | null>(null);
   
@@ -24,6 +29,17 @@ const MonthView: React.FC = () => {
   
   const handleDateClick = (date: Date) => {
     setSelectedDate(date);
+  };
+  
+  const handleDateDoubleClick = (date: Date) => {
+    setSelectedDate(date);
+    onOpenAddNote(true);
+  };
+  
+  const handleNoteClick = (e: React.MouseEvent, note: any) => {
+    e.stopPropagation(); // Prevent triggering cell click
+    setSelectedNote(note);
+    onOpenEditNote(true);
   };
   
   return (
@@ -47,15 +63,16 @@ const MonthView: React.FC = () => {
                                day.date.getFullYear() === selectedDate.getFullYear();
             
             return (
-              <button
+              <div
                 key={`${day.date.toISOString()}-${dayIndex}`}
                 className={`
                   relative h-24 p-1 rounded-md flex flex-col items-start transition-all duration-200
-                  ${day.isCurrentMonth ? 'bg-background hover:bg-secondary/50' : 'bg-muted/30 text-muted-foreground'}
+                  ${day.isCurrentMonth ? 'bg-background hover:bg-secondary/50 cursor-pointer' : 'bg-muted/30 text-muted-foreground'}
                   ${day.isToday ? 'today-cell font-semibold border border-calendar-today' : ''}
                   ${isSelected ? 'ring-1 ring-primary' : ''}
                 `}
                 onClick={() => handleDateClick(day.date)}
+                onDoubleClick={() => handleDateDoubleClick(day.date)}
               >
                 <span className="text-xs p-1 w-6 h-6 flex items-center justify-center">
                   {format(day.date, 'd')}
@@ -65,8 +82,9 @@ const MonthView: React.FC = () => {
                   {day.notes.slice(0, 3).map((note) => (
                     <div 
                       key={note.id} 
-                      className="w-full px-1.5 py-0.5 text-xs truncate rounded bg-background"
+                      className="w-full px-1.5 py-0.5 text-xs truncate rounded bg-background cursor-pointer hover:bg-opacity-80"
                       style={{ backgroundColor: note.color ? `${note.color}10` : undefined }}
+                      onClick={(e) => handleNoteClick(e, note)}
                     >
                       {note.title}
                     </div>
@@ -78,7 +96,7 @@ const MonthView: React.FC = () => {
                     </div>
                   )}
                 </div>
-              </button>
+              </div>
             );
           })
         )}

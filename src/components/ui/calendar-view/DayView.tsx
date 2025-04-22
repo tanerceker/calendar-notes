@@ -9,8 +9,13 @@ import { cn } from '@/lib/utils';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
-const DayView: React.FC = () => {
-  const { selectedDate, getNotesForDate } = useCalendar();
+interface DayViewProps {
+  onOpenAddNote: (open: boolean) => void;
+  onOpenEditNote: (open: boolean) => void;
+}
+
+const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
+  const { selectedDate, getNotesForDate, setSelectedNote } = useCalendar();
   const { t } = useLanguage();
   const [notes, setNotes] = useState<Note[]>([]);
   const [isTimelineOpen, setIsTimelineOpen] = useState(true);
@@ -26,6 +31,23 @@ const DayView: React.FC = () => {
       const noteDate = new Date(note.date);
       return noteDate.getHours() === hour;
     });
+  };
+  
+  const handleHourClick = (hour: number) => {
+    const date = new Date(selectedDate);
+    date.setHours(hour);
+    // Handle other actions if needed
+  };
+  
+  const handleHourDoubleClick = (hour: number) => {
+    const date = new Date(selectedDate);
+    date.setHours(hour);
+    onOpenAddNote(true);
+  };
+  
+  const handleNoteClick = (note: Note) => {
+    setSelectedNote(note);
+    onOpenEditNote(true);
   };
   
   const currentHour = new Date().getHours();
@@ -57,7 +79,12 @@ const DayView: React.FC = () => {
               const isCurrentHour = hour === currentHour;
               
               return (
-                <div key={hour} className="flex">
+                <div 
+                  key={hour} 
+                  className="flex"
+                  onClick={() => handleHourClick(hour)}
+                  onDoubleClick={() => handleHourDoubleClick(hour)}
+                >
                   <div 
                     className={cn(
                       "w-16 shrink-0 text-xs text-right pr-2 py-2",
@@ -69,9 +96,10 @@ const DayView: React.FC = () => {
                   
                   <div 
                     className={cn(
-                      "flex-1 border-l-2 pl-4 py-2 min-h-[3rem] transition-colors",
+                      "flex-1 border-l-2 pl-4 py-2 min-h-[3rem] transition-colors cursor-pointer",
                       isCurrentHour ? "border-primary" : "border-border",
-                      hourNotes.length > 0 ? "bg-secondary/10" : ""
+                      hourNotes.length > 0 ? "bg-secondary/10" : "",
+                      "hover:bg-secondary/20"
                     )}
                   >
                     {hourNotes.length > 0 ? (
@@ -79,10 +107,14 @@ const DayView: React.FC = () => {
                         {hourNotes.map((note) => (
                           <div 
                             key={note.id}
-                            className="p-2 rounded-md text-sm transition-all hover:translate-x-1"
+                            className="p-2 rounded-md text-sm transition-all hover:translate-x-1 cursor-pointer"
                             style={{ 
                               backgroundColor: note.color ? `${note.color}15` : undefined,
                               borderLeft: `3px solid ${note.color || '#3498db'}`
+                            }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleNoteClick(note);
                             }}
                           >
                             <div className="font-medium">{note.title}</div>
@@ -115,7 +147,8 @@ const DayView: React.FC = () => {
             {notes.map((note) => (
               <div 
                 key={note.id}
-                className="p-3 rounded-lg card-shadow bg-background transition-all hover:translate-y-[-2px]"
+                className="p-3 rounded-lg card-shadow bg-background transition-all hover:translate-y-[-2px] cursor-pointer"
+                onClick={() => handleNoteClick(note)}
               >
                 <div className="flex items-start justify-between">
                   <h4 className="font-medium">{note.title}</h4>

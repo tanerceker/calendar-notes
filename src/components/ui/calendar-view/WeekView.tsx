@@ -4,8 +4,13 @@ import { useCalendar } from '@/context/CalendarContext';
 import { startOfWeek, addDays, format, isSameDay } from 'date-fns';
 import { Note } from '@/types/calendar';
 
-const WeekView: React.FC = () => {
-  const { currentDate, selectedDate, setSelectedDate, getNotesForDate } = useCalendar();
+interface WeekViewProps {
+  onOpenAddNote: (open: boolean) => void;
+  onOpenEditNote: (open: boolean) => void;
+}
+
+const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
+  const { currentDate, selectedDate, setSelectedDate, getNotesForDate, setSelectedNote } = useCalendar();
   const [weekDays, setWeekDays] = useState<Date[]>([]);
   
   useEffect(() => {
@@ -28,6 +33,19 @@ const WeekView: React.FC = () => {
     const newDate = new Date(date);
     newDate.setHours(hour);
     setSelectedDate(newDate);
+  };
+  
+  const handleCellDoubleClick = (date: Date, hour: number) => {
+    const newDate = new Date(date);
+    newDate.setHours(hour);
+    setSelectedDate(newDate);
+    onOpenAddNote(true);
+  };
+  
+  const handleNoteClick = (e: React.MouseEvent, note: Note) => {
+    e.stopPropagation();
+    setSelectedNote(note);
+    onOpenEditNote(true);
   };
   
   return (
@@ -71,10 +89,12 @@ const WeekView: React.FC = () => {
                 <div 
                   key={`${day.toISOString()}-${hour}`}
                   className={`
-                    flex-1 border-l border-border p-1 relative
-                    ${isCurrentHour ? 'bg-blue-50' : ''}
+                    flex-1 border-l border-border p-1 relative cursor-pointer
+                    ${isCurrentHour ? 'bg-blue-50 dark:bg-blue-950/20' : ''}
+                    hover:bg-secondary/30
                   `}
                   onClick={() => handleCellClick(day, hour)}
+                  onDoubleClick={() => handleCellDoubleClick(day, hour)}
                 >
                   {notesForHour.map((note) => (
                     <div 
@@ -85,6 +105,7 @@ const WeekView: React.FC = () => {
                         color: 'white'
                       }}
                       title={note.title}
+                      onClick={(e) => handleNoteClick(e, note)}
                     >
                       {note.title}
                     </div>
