@@ -3,9 +3,11 @@ import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const NotFound = () => {
   const location = useLocation();
+  const { t } = useLanguage();
 
   useEffect(() => {
     console.error(
@@ -22,11 +24,11 @@ const NotFound = () => {
         </div>
         <h1 className="text-4xl font-bold mb-4">404</h1>
         <p className="text-xl text-muted-foreground mb-6">
-          Oops! The page you are looking for doesn't exist.
+          {t('pageNotFound')}
         </p>
         <Button asChild>
           <a href="/" className="focus-ring">
-            Return to Calendar
+            {t('returnToCalendar')}
           </a>
         </Button>
       </div>
