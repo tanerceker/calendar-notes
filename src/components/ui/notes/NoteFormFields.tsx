@@ -1,4 +1,3 @@
-
 import React, { useCallback } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Input } from '@/components/ui/input';
@@ -39,10 +38,14 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
 }) => {
   const { t, locale } = useLanguage();
   
-  const handleTimeChange = useCallback((newTime: string) => {
+  const handleTimeChange = useCallback((newTime: string, completed: boolean) => {
     setTime(newTime);
-    // Time picker artık seçim sonrası kapanmayacak
-  }, [setTime]);
+    
+    // Only close the picker if both hour and minute have been selected
+    if (completed) {
+      setTimePickerOpen(false);
+    }
+  }, [setTime, setTimePickerOpen]);
 
   return (
     <div className="grid gap-4">
@@ -124,15 +127,6 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
                 value={time} 
                 onChange={handleTimeChange}
               />
-              <div className="mt-2 flex justify-end">
-                <Button 
-                  size="sm" 
-                  onClick={() => setTimePickerOpen(false)}
-                  variant="outline"
-                >
-                  {t('done')}
-                </Button>
-              </div>
             </PopoverContent>
           </Popover>
         </div>
