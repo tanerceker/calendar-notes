@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -62,7 +63,7 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
         onOpenChange={setIsTimelineOpen}
         className="flex-1 overflow-auto hide-scrollbar"
       >
-        <CollapsibleTrigger className="flex items-center justify-center w-full p-2 text-sm text-muted-foreground hover:bg-secondary/50">
+        <CollapsibleTrigger className="flex items-center justify-center w-full p-2 text-sm text-muted-foreground hover:bg-secondary/50 cursor-pointer">
           {t('timeline')} {isTimelineOpen ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />}
         </CollapsibleTrigger>
         
