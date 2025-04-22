@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { getFormattedTime } from '@/lib/calendar-utils';
 
 interface DayViewProps {
   onOpenAddNote: (open: boolean) => void;
@@ -49,6 +50,16 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
   const currentHour = useMemo(() => new Date().getHours(), []);
   const dateLocale = locale === 'tr' ? tr : enUS;
   
+  const formatHour = (hour: number): string => {
+    if (locale === 'tr') {
+      // 24-hour format for Turkish
+      return `${hour}:00`;
+    } else {
+      // 12-hour format for English
+      return hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`;
+    }
+  };
+  
   return (
     <div className="flex flex-col h-full animate-in slide-in">
       <div className="text-center p-4">
@@ -88,7 +99,7 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
                       isCurrentHour ? "text-primary font-medium" : "text-muted-foreground"
                     )}
                   >
-                    {hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`}
+                    {formatHour(hour)}
                   </div>
                   
                   <div 
@@ -153,7 +164,7 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
                 <div className="flex items-start justify-between">
                   <h4 className="font-medium">{note.title}</h4>
                   <span className="text-xs text-muted-foreground">
-                    {format(new Date(note.date), 'h:mm a', { locale: dateLocale })}
+                    {getFormattedTime(new Date(note.date), locale)}
                   </span>
                 </div>
                 <p className="text-sm text-muted-foreground mt-1 line-clamp-3">

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -11,6 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { CalendarIcon, Clock, X } from 'lucide-react';
+import { getFormattedDate } from '@/lib/calendar-utils';
 import {
   Select,
   SelectContent,
@@ -49,7 +51,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
   preSelectedTime
 }) => {
   const { selectedDate, addNote, updateNote } = useCalendar();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -184,7 +186,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, 'PPP') : <span>{t('pickDate')}</span>}
+                      {date ? getFormattedDate(date, locale) : <span>{t('pickDate')}</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0 pointer-events-auto">

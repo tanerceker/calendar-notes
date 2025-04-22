@@ -53,13 +53,14 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
       case 'month':
         return format(currentDate, 'MMMM yyyy', { locale: dateLocale });
       case 'week':
-        return `${t('weekOf')} ${format(currentDate, 'MMMM d, yyyy', { locale: dateLocale })}`;
+        // Remove the "Hafta" word and just display the date
+        return format(currentDate, 'MMMM d, yyyy', { locale: dateLocale });
       case 'day':
         return format(currentDate, 'EEEE, MMMM d, yyyy', { locale: dateLocale });
       default:
         return '';
     }
-  }, [calendarMode, currentDate, dateLocale, t]);
+  }, [calendarMode, currentDate, dateLocale]);
 
   const goToToday = useCallback(() => {
     setCurrentDate(new Date());

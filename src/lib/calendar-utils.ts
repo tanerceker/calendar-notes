@@ -66,6 +66,22 @@ export function getFormattedDate(date: Date, locale: 'tr' | 'en' = 'en'): string
   return format(date, 'PPP', { locale: dateLocale });
 }
 
+export function getFormattedDateTime(date: Date, locale: 'tr' | 'en' = 'en'): string {
+  const dateLocale = locale === 'tr' ? tr : enUS;
+  return format(date, 'PPpp', { locale: dateLocale });
+}
+
+export function getFormattedTime(date: Date, locale: 'tr' | 'en' = 'en'): string {
+  const dateLocale = locale === 'tr' ? tr : enUS;
+  if (locale === 'tr') {
+    // 24-hour format for Turkish
+    return format(date, 'HH:mm', { locale: dateLocale });
+  } else {
+    // 12-hour format for English
+    return format(date, 'h:mm a', { locale: dateLocale });
+  }
+}
+
 export function groupNotesByDate(notes: Note[]): Record<string, Note[]> {
   return notes.reduce((acc, note) => {
     const dateKey = format(new Date(note.date), 'yyyy-MM-dd');
