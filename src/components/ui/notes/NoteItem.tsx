@@ -6,6 +6,7 @@ import { Pencil, Trash2, PinIcon, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getFormattedDateTime } from '@/lib/calendar-utils';
 import { TranslationKey } from '@/types/translations';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface NoteItemProps {
   note: Note;
@@ -23,9 +24,10 @@ const NoteItem: React.FC<NoteItemProps> = ({
   onDeleteClick 
 }) => {
   const { locale, t } = useLanguage();
+  const isMobile = useIsMobile();
 
   return (
-    <div className="group p-3 rounded-lg transition-all hover:bg-secondary/20">
+    <div className="group p-2 md:p-3 rounded-lg transition-all hover:bg-secondary/20">
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-start gap-2 flex-1">
           <button
@@ -40,10 +42,11 @@ const NoteItem: React.FC<NoteItemProps> = ({
             <div className="flex items-center justify-between">
               <h3 className="font-medium text-sm">{note.title}</h3>
               <div className="flex items-center">
+                {/* Always show buttons on mobile, hover on desktop */}
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className={`h-7 w-7 ${isMobile ? '' : 'opacity-0 group-hover:opacity-100 transition-opacity'}`}
                   onClick={() => onTogglePin(note)}
                   aria-label={note.isPinned ? t('unpin') : t('pin')}
                 >
@@ -56,7 +59,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className={`h-7 w-7 ${isMobile ? '' : 'opacity-0 group-hover:opacity-100 transition-opacity'}`}
                   onClick={() => onEditClick(note)}
                   aria-label={t('edit')}
                 >
@@ -66,7 +69,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-destructive"
+                  className={`h-7 w-7 ${isMobile ? '' : 'opacity-0 group-hover:opacity-100 transition-opacity'} text-destructive`}
                   onClick={() => onDeleteClick(note.id)}
                   aria-label={t('delete')}
                 >
@@ -79,7 +82,7 @@ const NoteItem: React.FC<NoteItemProps> = ({
               {note.content}
             </p>
             
-            <div className="flex items-center justify-between mt-2">
+            <div className="flex items-center justify-between flex-wrap gap-1 mt-2">
               <div className="text-xs text-muted-foreground">
                 {getFormattedDateTime(new Date(note.date), locale)}
               </div>

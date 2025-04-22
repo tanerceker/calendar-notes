@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import TimePickerColumn from './TimePickerColumn';
 import { useTimePicker } from './useTimePicker';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TimePickerProps {
   value: string; // "HH:mm" format
@@ -19,6 +20,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
   className
 }) => {
   const { locale } = useLanguage();
+  const isMobile = useIsMobile();
   const { 
     hours, 
     minutes, 
@@ -32,7 +34,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
   const minuteTitle = locale === 'tr' ? 'Dakika' : 'Minute';
 
   return (
-    <div className={cn("flex gap-4 p-2", className)}>
+    <div className={cn("flex gap-2 md:gap-4 p-1 md:p-2", className)}>
       <TimePickerColumn
         title={hourTitle}
         items={hours}
