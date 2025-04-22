@@ -1,69 +1,107 @@
-# Welcome to your Lovable project
 
-## Project info
+# Calendar Notes Haven
 
-**URL**: https://lovable.dev/projects/6b7674b3-4c57-4389-842c-b3495b29d48f
+Bu proje, etkinlik ve not takibi yapmak için kullanılan bir takvim uygulamasıdır.
 
-## How can I edit this code?
+## Proje Hakkında
 
-There are several ways of editing your application.
+Calendar Notes Haven, günlük yaşamınızı organize etmenize yardımcı olmak için tasarlanmış bir web uygulamasıdır. Kullanıcılar notlar ekleyebilir, düzenleyebilir, silebilir ve takvim üzerinde görüntüleyebilir. Çoklu dil desteği (Türkçe ve İngilizce) ve karanlık/aydınlık tema seçenekleri sunar.
 
-**Use Lovable**
+## Özellikler
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6b7674b3-4c57-4389-842c-b3495b29d48f) and start prompting.
+- **Takvim Görünümleri**: Gün, Hafta ve Ay görünümleri arasında geçiş yapabilme
+- **Not Yönetimi**: Notlar ekleme, düzenleme ve silme
+- **Zaman Seçici**: Kullanıcı dostu saat ve dakika seçme arayüzü
+- **Etiketler ve Renk Kodlama**: Notları kategorilere ayırma ve renklerle işaretleme
+- **Çoklu Dil Desteği**: Türkçe ve İngilizce dil seçenekleri
+- **Tema Değiştirme**: Karanlık ve aydınlık tema seçenekleri
+- **Duyarlı Tasarım**: Mobil ve masaüstü cihazlara uyumlu arayüz
 
-Changes made via Lovable will be committed automatically to this repo.
+## Teknolojiler
 
-**Use your preferred IDE**
+Projede kullanılan başlıca teknolojiler:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **React**: UI bileşenleri için JavaScript kütüphanesi
+- **TypeScript**: Tip güvenliği için JavaScript üzerine kurulu bir dil
+- **Vite**: Hızlı geliştirme ve derleme için modern bir araç
+- **Tailwind CSS**: Hızlı UI geliştirme için kullanılan CSS framework'ü
+- **shadcn/ui**: Modern ve özelleştirilebilir UI bileşenlerini kullanan kütüphane
+- **React Query**: Sunucu durumu yönetimi için kullanılan kütüphane
+- **React Router**: Sayfa yönlendirmesi için kullanılan kütüphane
+- **date-fns**: Tarih işlemleri için kullanılan yardımcı kütüphane
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Kurulum
 
-Follow these steps:
+Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyin:
+
+### Ön Koşullar
+
+- Node.js (en güncel sürüm)
+- npm veya yarn paket yöneticisi
+
+### Adımlar
+
+1. Repo'yu klonlayın:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+git clone <repo-url>
+cd calendar-notes-haven
 ```
 
-**Edit a file directly in GitHub**
+2. Bağımlılıkları yükleyin:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```sh
+npm install
+# veya
+yarn install
+```
 
-**Use GitHub Codespaces**
+3. Geliştirme sunucusunu başlatın:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```sh
+npm run dev
+# veya
+yarn dev
+```
 
-## What technologies are used for this project?
+4. Tarayıcınızda açın:
 
-This project is built with .
+```
+http://localhost:8080
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Proje Yapısı
 
-## How can I deploy this project?
+```
+src/
+  ├── components/         # UI bileşenleri
+  │   ├── layout/         # Sayfa düzeni bileşenleri
+  │   └── ui/             # Yeniden kullanılabilir UI bileşenleri
+  ├── context/            # React context tanımlamaları
+  ├── hooks/              # Özel React hooks'ları
+  ├── lib/                # Yardımcı fonksiyonlar ve araçlar
+  ├── pages/              # Sayfa bileşenleri
+  └── types/              # TypeScript tip tanımlamaları
+```
 
-Simply open [Lovable](https://lovable.dev/projects/6b7674b3-4c57-4389-842c-b3495b29d48f) and click on Share -> Publish.
+## Yapılan Geliştirmeler
 
-## I want to use a custom domain - is that possible?
+### Takvim Bileşenleri
+- Takvim görünüm modları (gün, hafta, ay) oluşturuldu
+- Takvimde tarih seçimi ve gezinme özellikleri eklendi
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+### Not Yönetimi
+- Not ekleme, düzenleme ve silme işlemleri için diyalog formları oluşturuldu
+- Notları etiketleme ve renk kodlama özellikleri eklendi
+
+### Zaman Seçici
+- Kullanıcı dostu saat ve dakika seçim bileşeni geliştirildi
+- Saat ve dakika seçimleri tamamlandıktan sonra seçim arayüzünün otomatik kapanması sağlandı
+
+### Çoklu Dil Desteği
+- Türkçe ve İngilizce dil seçenekleri eklendi
+- Dil değiştirme fonksiyonu uygulandı
+
+### Tema Değiştirme
+- Karanlık ve aydınlık tema seçenekleri eklendi
+- Kullanıcı tema tercihlerinin saklanması sağlandı
