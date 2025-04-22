@@ -45,10 +45,4 @@ export type TranslationKey =
   | 'priority'
   | 'selectTags'
   | 'createNewTag'
-  | 'calendarNotes'
-  | 'turkish'
-  | 'english'
-  | 'month'
-  | 'week'
-  | 'day'
   | string; // Allow string for backwards compatibility during transition

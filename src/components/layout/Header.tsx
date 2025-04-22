@@ -5,7 +5,7 @@ import { useTheme } from '@/context/ThemeContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { CalendarMode } from '@/types/calendar';
-import { format, setMonth } from 'date-fns';
+import { format } from 'date-fns';
 import { tr, enUS } from 'date-fns/locale';
 import { 
   Calendar, 
@@ -14,8 +14,7 @@ import {
   Plus, 
   Moon, 
   Sun, 
-  Globe,
-  CalendarDays
+  Globe 
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -23,18 +22,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface HeaderProps {
   onAddNote: () => void;
@@ -79,26 +66,6 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
     setCurrentDate(new Date());
   }, [setCurrentDate]);
 
-  const handleMonthChange = useCallback((monthIndex: string) => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(parseInt(monthIndex, 10));
-    setCurrentDate(newDate);
-  }, [currentDate, setCurrentDate]);
-
-  const months = useCallback(() => {
-    const monthsArray = [];
-    for (let i = 0; i < 12; i++) {
-      const date = new Date(currentDate.getFullYear(), i, 1);
-      monthsArray.push({
-        value: i.toString(),
-        label: format(date, 'MMMM', { locale: dateLocale })
-      });
-    }
-    return monthsArray;
-  }, [currentDate, dateLocale]);
-
-  const currentMonthIndex = currentDate.getMonth().toString();
-
   return (
     <header className="flex items-center justify-between p-2 glass-effect sticky top-0 z-10 animate-in fade-in">
       <div className="flex items-center space-x-2">
@@ -119,31 +86,9 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
               <ChevronLeft className="h-4 w-4" />
             </Button>
             
-            {calendarMode === 'month' ? (
-              <div className="flex items-center space-x-1">
-                <Select value={currentMonthIndex} onValueChange={handleMonthChange}>
-                  <SelectTrigger className="w-[130px] h-8 text-sm border-none focus-visible:ring-0 font-medium">
-                    <SelectValue>
-                      {format(currentDate, 'MMMM', { locale: dateLocale })}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {months().map((month) => (
-                      <SelectItem key={month.value} value={month.value}>
-                        {month.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <span className="text-sm font-medium">
-                  {format(currentDate, 'yyyy', { locale: dateLocale })}
-                </span>
-              </div>
-            ) : (
-              <span className="text-sm font-medium mx-2 min-w-28 text-center">
-                {getHeaderTitle()}
-              </span>
-            )}
+            <span className="text-sm font-medium mx-2 min-w-28 text-center">
+              {getHeaderTitle()}
+            </span>
             
             <Button
               variant="ghost"
