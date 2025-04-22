@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { generateCalendarMonth } from '@/lib/calendar-utils';
 import { format } from 'date-fns';
+import { tr, enUS } from 'date-fns/locale';
 import { CalendarMonth } from '@/types/calendar';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -14,14 +15,26 @@ interface MonthViewProps {
 const MonthView: React.FC<MonthViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
   const { currentDate, selectedDate, setSelectedDate, notes, setSelectedNote } = useCalendar();
   const [calendarData, setCalendarData] = useState<CalendarMonth | null>(null);
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   
   useEffect(() => {
     const data = generateCalendarMonth(currentDate, notes);
     setCalendarData(data);
   }, [currentDate, notes]);
   
-  const weekdays = useMemo(() => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], []);
+  const weekdays = useMemo(() => {
+    const dateLocale = locale === 'tr' ? tr : enUS;
+    const firstDayOfWeek = new Date(2024, 0, 1); // Monday
+    const days = [];
+    
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(firstDayOfWeek);
+      day.setDate(firstDayOfWeek.getDate() + i);
+      days.push(format(day, 'EEE', { locale: dateLocale }));
+    }
+    
+    return days;
+  }, [locale]);
   
   const handleDateClick = useCallback((date: Date) => {
     setSelectedDate(date);
@@ -42,9 +55,11 @@ const MonthView: React.FC<MonthViewProps> = ({ onOpenAddNote, onOpenEditNote }) 
     return <div className="h-full flex items-center justify-center">{t('loading')}</div>;
   }
   
+  const dateLocale = locale === 'tr' ? tr : enUS;
+  
   return (
     <div className="w-full h-full flex flex-col overflow-hidden animate-in slide-in">
-      <div className="calendar-grid mb-1">
+      <div className="calendar-grid mb-1 shrink-0">
         {weekdays.map((day) => (
           <div 
             key={day} 
@@ -55,7 +70,7 @@ const MonthView: React.FC<MonthViewProps> = ({ onOpenAddNote, onOpenEditNote }) 
         ))}
       </div>
       
-      <div className="calendar-grid gap-1 flex-1">
+      <div className="calendar-grid gap-1 flex-1 overflow-hidden">
         {calendarData.weeks.flatMap(week => 
           week.days.map((day, dayIndex) => {
             const isSelected = day.date.getDate() === selectedDate.getDate() && 

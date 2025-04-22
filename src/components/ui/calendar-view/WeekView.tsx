@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { startOfWeek, addDays, format, isSameDay } from 'date-fns';
+import { tr, enUS } from 'date-fns/locale';
 import { Note } from '@/types/calendar';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -13,7 +14,7 @@ interface WeekViewProps {
 const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
   const { currentDate, selectedDate, setSelectedDate, getNotesForDate, setSelectedNote } = useCalendar();
   const [weekDays, setWeekDays] = useState<Date[]>([]);
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   
   useEffect(() => {
     const start = startOfWeek(currentDate, { weekStartsOn: 1 });
@@ -54,6 +55,8 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
     return <div className="h-full flex items-center justify-center">{t('loading')}</div>;
   }
   
+  const dateLocale = locale === 'tr' ? tr : enUS;
+  
   return (
     <div className="w-full h-full overflow-auto hide-scrollbar animate-in slide-in">
       <div className="sticky top-0 z-10 bg-background flex">
@@ -71,9 +74,9 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
                 ${isSelected ? 'bg-secondary/50' : ''}
               `}
             >
-              <div className="text-xs">{format(day, 'EEE')}</div>
+              <div className="text-xs">{format(day, 'EEE', { locale: dateLocale })}</div>
               <div className={`text-sm mt-1 ${isToday ? 'text-primary' : ''}`}>
-                {format(day, 'd')}
+                {format(day, 'd', { locale: dateLocale })}
               </div>
             </div>
           );

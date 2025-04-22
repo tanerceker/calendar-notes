@@ -1,5 +1,6 @@
 
 import { addDays, startOfWeek, startOfMonth, endOfMonth, endOfWeek, isSameMonth, isSameDay, format } from 'date-fns';
+import { tr, enUS } from 'date-fns/locale';
 import { CalendarDay, CalendarMonth, CalendarWeek, Note } from '@/types/calendar';
 
 export function generateCalendarMonth(date: Date, notes: Note[] = []): CalendarMonth {
@@ -50,16 +51,19 @@ export function generateCalendarMonth(date: Date, notes: Note[] = []): CalendarM
   };
 }
 
-export function getDayName(date: Date, format: 'long' | 'short' = 'long'): string {
-  return new Intl.DateTimeFormat('en', { weekday: format }).format(date);
+export function getDayName(date: Date, locale: 'tr' | 'en' = 'en', format: 'long' | 'short' = 'long'): string {
+  const dateLocale = locale === 'tr' ? tr : enUS;
+  return new Intl.DateTimeFormat(locale, { weekday: format }).format(date);
 }
 
-export function getMonthName(date: Date, format: 'long' | 'short' = 'long'): string {
-  return new Intl.DateTimeFormat('en', { month: format }).format(date);
+export function getMonthName(date: Date, locale: 'tr' | 'en' = 'en', format: 'long' | 'short' = 'long'): string {
+  const dateLocale = locale === 'tr' ? tr : enUS;
+  return new Intl.DateTimeFormat(locale, { month: format }).format(date);
 }
 
-export function getFormattedDate(date: Date): string {
-  return format(date, 'PPP');
+export function getFormattedDate(date: Date, locale: 'tr' | 'en' = 'en'): string {
+  const dateLocale = locale === 'tr' ? tr : enUS;
+  return format(date, 'PPP', { locale: dateLocale });
 }
 
 export function groupNotesByDate(notes: Note[]): Record<string, Note[]> {
