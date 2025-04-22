@@ -95,10 +95,10 @@ const WeekView: React.FC<WeekViewProps> = ({ onOpenAddNote, onOpenEditNote }) =>
         })}
       </div>
       
-      <ScrollArea className="flex-1 overflow-y-auto">
-        <div className="relative min-h-[1500px]">
+      <ScrollArea className="flex-1">
+        <div className="min-h-[1500px]">
           {hours.map((hour) => (
-            <div key={hour} className="flex h-16 border-t border-border">
+            <div key={`hour-${hour}`} className="flex h-16 border-t border-border">
               <div className="w-16 shrink-0 pr-2 text-xs text-right text-muted-foreground flex items-start pt-1 sticky left-0 bg-background z-10">
                 {formatHour(hour)}
               </div>
