@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getHoursArray, getMinutesArray, parseTimeString } from '@/lib/calendar-utils';
 
-export const useTimePicker = (initialValue: string, minuteStep: number = 5) => {
+export const useTimePicker = (initialValue: string, minuteStep: number = 5, onChange?: (value: string) => void) => {
   const { hours: initialHours, minutes: initialMinutes } = parseTimeString(initialValue);
   
   const [selectedHour, setSelectedHour] = useState<string>(initialHours);
@@ -42,11 +42,19 @@ export const useTimePicker = (initialValue: string, minuteStep: number = 5) => {
   
   const handleHourClick = useCallback((hour: string) => {
     setSelectedHour(hour);
-  }, []);
+    // Update parent when hour changes
+    if (onChange && hour && selectedMinute) {
+      onChange(`${hour}:${selectedMinute}`);
+    }
+  }, [selectedMinute, onChange]);
   
   const handleMinuteClick = useCallback((minute: string) => {
     setSelectedMinute(minute);
-  }, []);
+    // Update parent when minute changes
+    if (onChange && selectedHour && minute) {
+      onChange(`${selectedHour}:${minute}`);
+    }
+  }, [selectedHour, onChange]);
   
   return {
     hours,

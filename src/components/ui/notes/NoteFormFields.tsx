@@ -1,4 +1,3 @@
-
 import React, { useCallback } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Input } from '@/components/ui/input';
@@ -40,10 +39,9 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
   const { t, locale } = useLanguage();
   
   const handleTimeChange = useCallback((newTime: string) => {
-    if (newTime) {
-      setTime(newTime);
-    }
-  }, [setTime]);
+    setTime(newTime);
+    setTimeout(() => setTimePickerOpen(false), 300);
+  }, [setTime, setTimePickerOpen]);
 
   return (
     <div className="grid gap-4">
@@ -123,11 +121,7 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
             <PopoverContent className="w-auto p-3 pointer-events-auto" align="start">
               <TimePicker 
                 value={time} 
-                onChange={(newTime) => {
-                  handleTimeChange(newTime);
-                  // Auto-close the popover after selection
-                  setTimePickerOpen(false);
-                }} 
+                onChange={handleTimeChange}
               />
             </PopoverContent>
           </Popover>
