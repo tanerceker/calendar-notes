@@ -1,13 +1,14 @@
 
 import React, { useState } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { Note } from '@/types/calendar';
-import { format } from 'date-fns';
 import { Pencil, Trash2, Calendar as CalendarIcon, PinIcon, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import NoteDialog from './NoteDialog';
+import { getFormattedDateTime } from '@/lib/calendar-utils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +22,7 @@ import {
 
 const NoteList: React.FC = () => {
   const { notes, updateNote, deleteNote } = useCalendar();
+  const { locale, t } = useLanguage();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [currentNote, setCurrentNote] = useState<Note | undefined>(undefined);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -72,9 +74,9 @@ const NoteList: React.FC = () => {
     return (
       <div className="h-full flex flex-col items-center justify-center p-6 text-center">
         <CalendarIcon className="h-12 w-12 text-muted-foreground mb-4" />
-        <h3 className="text-lg font-medium">No Notes Yet</h3>
+        <h3 className="text-lg font-medium">{t('noNotesYet')}</h3>
         <p className="text-sm text-muted-foreground mt-2 max-w-xs">
-          Create your first note by clicking the "Add Note" button in the header.
+          {t('createFirstNote')}
         </p>
       </div>
     );
@@ -140,7 +142,7 @@ const NoteList: React.FC = () => {
                     
                     <div className="flex items-center justify-between mt-2">
                       <div className="text-xs text-muted-foreground">
-                        {format(new Date(note.date), 'PPP p')}
+                        {getFormattedDateTime(new Date(note.date), locale)}
                       </div>
                       
                       {note.tags && note.tags.length > 0 && (
@@ -179,18 +181,18 @@ const NoteList: React.FC = () => {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>{t('areYouSure')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the note.
+              {t('actionCannotBeUndone')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
             <AlertDialogAction 
               onClick={confirmDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {t('delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
