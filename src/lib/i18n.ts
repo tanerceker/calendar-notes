@@ -88,8 +88,7 @@ export const translations: {
     dateCreated: 'Oluşturulma Tarihi',
     priority: 'Öncelik',
     selectTags: 'Etiketleri Seç',
-    createNewTag: 'Yeni Etiket Oluştur',
-    update: 'Güncelle'
+    createNewTag: 'Yeni Etiket Oluştur'
   },
   en: {
     calendarNotes: 'Calendar Notes',
@@ -171,7 +170,6 @@ export const translations: {
     dateCreated: 'Date Created',
     priority: 'Priority',
     selectTags: 'Select Tags',
-    createNewTag: 'Create New Tag',
-    update: 'Update'
+    createNewTag: 'Create New Tag'
   }
 };
