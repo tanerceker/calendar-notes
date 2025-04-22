@@ -11,6 +11,7 @@ interface ThemeContextProps {
 const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Set the default to 'light' mode
   const [theme, setTheme] = useState<Theme>('light');
 
   useEffect(() => {
@@ -18,10 +19,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const savedTheme = localStorage.getItem('theme') as Theme;
     if (savedTheme) {
       setTheme(savedTheme);
-    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      // Use system preference as fallback
-      setTheme('dark');
-    }
+    } 
+    // Remove system preference detection to make light the default
+    // else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    //   setTheme('dark');
+    // }
   }, []);
 
   useEffect(() => {

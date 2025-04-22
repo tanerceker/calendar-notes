@@ -19,12 +19,12 @@ const CalendarApp: React.FC = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="h-screen flex flex-col overflow-hidden">
       <Header onAddNote={handleAddNote} />
       
       <div className="flex-1 overflow-hidden">
-        <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={70} minSize={40}>
+        <ResizablePanelGroup direction="horizontal" className="h-full">
+          <ResizablePanel defaultSize={70} minSize={40} className="h-full">
             <div className="h-full overflow-auto">
               {calendarMode === 'month' && <MonthView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />}
               {calendarMode === 'week' && <WeekView onOpenAddNote={setIsAddNoteOpen} onOpenEditNote={setIsEditNoteOpen} />}
@@ -34,7 +34,7 @@ const CalendarApp: React.FC = () => {
           
           <ResizableHandle withHandle />
           
-          <ResizablePanel defaultSize={30} minSize={25}>
+          <ResizablePanel defaultSize={30} minSize={25} className="h-full">
             <div className="h-full overflow-hidden">
               <NoteList />
             </div>
