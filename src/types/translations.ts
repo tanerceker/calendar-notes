@@ -82,4 +82,6 @@ export type TranslationKey =
   | 'reminder'
   | 'idea'
   | 'task'
-  | 'update'; // Added missing key
+  | 'update'
+  | 'showCalendar'
+  | 'showNotes';

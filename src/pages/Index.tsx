@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useMemo } from 'react';
 import { useCalendar, CalendarProvider } from '@/context/CalendarContext';
 import Header from '@/components/layout/Header';
@@ -9,6 +8,7 @@ import NoteDialog from '@/components/ui/notes/NoteDialog';
 import NoteList from '@/components/ui/notes/NoteList';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useLanguage } from '@/context/LanguageContext';
 
 const CalendarApp: React.FC = () => {
   const { calendarMode, selectedNote, selectedDate } = useCalendar();
@@ -16,6 +16,7 @@ const CalendarApp: React.FC = () => {
   const [isEditNoteOpen, setIsEditNoteOpen] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
   const isMobile = useIsMobile();
+  const { t } = useLanguage();
   
   const handleAddNote = useCallback(() => {
     setIsAddNoteOpen(true);
@@ -24,7 +25,6 @@ const CalendarApp: React.FC = () => {
   const handleEditNoteClose = useCallback((open: boolean) => {
     setIsEditNoteOpen(open);
     if (!open) {
-      // When closing, clear the selected note
       const { setSelectedNote } = useCalendar();
       setSelectedNote(null);
     }
@@ -43,7 +43,6 @@ const CalendarApp: React.FC = () => {
     }
   }, [calendarMode, setIsAddNoteOpen, setIsEditNoteOpen]);
   
-  // For mobile, we'll use a different layout
   if (isMobile) {
     return (
       <div className="h-full flex flex-col overflow-hidden">
@@ -55,7 +54,7 @@ const CalendarApp: React.FC = () => {
               onClick={() => setShowNotes(!showNotes)}
               className="text-sm font-medium bg-primary text-primary-foreground px-3 py-1 rounded-full"
             >
-              {showNotes ? 'Show Calendar' : 'Show Notes'}
+              {showNotes ? t('showCalendar') : t('showNotes')}
             </button>
           </div>
           
@@ -85,7 +84,6 @@ const CalendarApp: React.FC = () => {
     );
   }
   
-  // For tablet and desktop
   return (
     <div className="h-full flex flex-col overflow-hidden">
       <Header onAddNote={handleAddNote} />
