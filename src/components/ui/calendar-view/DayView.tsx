@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -15,7 +14,7 @@ interface DayViewProps {
 }
 
 const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
-  const { selectedDate, getNotesForDate, setSelectedNote } = useCalendar();
+  const { selectedDate, getNotesForDate, setSelectedNote, setSelectedDate } = useCalendar();
   const { t } = useLanguage();
   const [notes, setNotes] = useState<Note[]>([]);
   const [isTimelineOpen, setIsTimelineOpen] = useState(true);
@@ -36,12 +35,7 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
   const handleHourClick = (hour: number) => {
     const date = new Date(selectedDate);
     date.setHours(hour);
-    // Handle other actions if needed
-  };
-  
-  const handleHourDoubleClick = (hour: number) => {
-    const date = new Date(selectedDate);
-    date.setHours(hour);
+    setSelectedDate(date);
     onOpenAddNote(true);
   };
   
@@ -82,8 +76,6 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
                 <div 
                   key={hour} 
                   className="flex"
-                  onClick={() => handleHourClick(hour)}
-                  onDoubleClick={() => handleHourDoubleClick(hour)}
                 >
                   <div 
                     className={cn(
@@ -101,6 +93,7 @@ const DayView: React.FC<DayViewProps> = ({ onOpenAddNote, onOpenEditNote }) => {
                       hourNotes.length > 0 ? "bg-secondary/10" : "",
                       "hover:bg-secondary/20"
                     )}
+                    onClick={() => hourNotes.length === 0 ? handleHourClick(hour) : null}
                   >
                     {hourNotes.length > 0 ? (
                       <div className="space-y-2">
