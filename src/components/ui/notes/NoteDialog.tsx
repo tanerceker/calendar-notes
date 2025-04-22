@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -25,6 +24,7 @@ interface NoteDialogProps {
   onOpenChange: (open: boolean) => void;
   note?: Note;
   mode: 'add' | 'edit';
+  preSelectedTime?: Date;
 }
 
 const tagOptions = [
@@ -45,7 +45,8 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
   open, 
   onOpenChange, 
   note, 
-  mode
+  mode,
+  preSelectedTime
 }) => {
   const { selectedDate, addNote, updateNote } = useCalendar();
   const { t } = useLanguage();
@@ -60,8 +61,13 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
   
   useEffect(() => {
     if (mode === 'add') {
-      setDate(selectedDate || new Date());
-      setTime('12:00');
+      const initialDate = preSelectedTime || selectedDate || new Date();
+      setDate(initialDate);
+      
+      const hours = initialDate.getHours().toString().padStart(2, '0');
+      const minutes = initialDate.getMinutes() >= 30 ? '30' : '00';
+      setTime(`${hours}:${minutes}`);
+      
       setTitle('');
       setContent('');
       setTags([]);
@@ -76,7 +82,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
       setColor(note.color || '#3498db');
       setReminder(note.reminder || null);
     }
-  }, [mode, note, selectedDate, open]);
+  }, [mode, note, selectedDate, preSelectedTime, open]);
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,7 +127,6 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
-  // Modern zaman seçici için saatler ve dakikalar
   const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
   const minutes = Array.from({ length: 12 }, (_, i) => (i * 5).toString().padStart(2, '0'));
   
