@@ -13,6 +13,7 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { CalendarIcon, Clock, X } from 'lucide-react';
 import { getFormattedDate } from '@/lib/calendar-utils';
+import TimePicker from '@/components/ui/time-picker/TimePicker';
 import {
   Select,
   SelectContent,
@@ -60,6 +61,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
   const [tags, setTags] = useState<string[]>([]);
   const [color, setColor] = useState('#3498db');
   const [reminder, setReminder] = useState<Date | null>(null);
+  const [timePickerOpen, setTimePickerOpen] = useState(false);
   
   useEffect(() => {
     if (mode === 'add') {
@@ -128,9 +130,10 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
   const handleRemoveTag = (tagToRemove: string) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
-
-  const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
-  const minutes = Array.from({ length: 12 }, (_, i) => (i * 5).toString().padStart(2, '0'));
+  
+  const handleTimeChange = (newTime: string) => {
+    setTime(newTime);
+  };
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -141,7 +144,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
               {mode === 'add' ? t('addNote') : t('editNote')}
             </DialogTitle>
             <DialogDescription className="text-muted-foreground text-sm">
-              {mode === 'add' ? t('addNote') : t('editNote')}
+              {mode === 'add' ? t('createNote') : t('updateNote')}
             </DialogDescription>
           </DialogHeader>
           
@@ -195,7 +198,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
                       selected={date}
                       onSelect={(date) => date && setDate(date)}
                       initialFocus
-                      className="p-3"
+                      className="p-3 pointer-events-auto"
                     />
                   </PopoverContent>
                 </Popover>
@@ -205,62 +208,23 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
                 <label htmlFor="time" className="text-sm font-medium">
                   {t('time')}
                 </label>
-                <div className="relative">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className={cn(
-                          "w-full justify-start text-left text-sm font-normal focus-ring",
-                          !time && "text-muted-foreground"
-                        )}
-                      >
-                        <Clock className="mr-2 h-4 w-4" />
-                        {time}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-48 p-2">
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="space-y-2">
-                          <p className="text-xs font-medium text-muted-foreground mb-1">Hour</p>
-                          <div className="h-[180px] overflow-y-auto pr-2 scrollbar-thin">
-                            {hours.map((hour) => (
-                              <Button
-                                key={hour}
-                                variant={time.split(':')[0] === hour ? "default" : "ghost"}
-                                className="w-full justify-center text-center mb-1"
-                                onClick={() => {
-                                  const [_, min] = time.split(':');
-                                  setTime(`${hour}:${min}`);
-                                }}
-                              >
-                                {hour}
-                              </Button>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="space-y-2">
-                          <p className="text-xs font-medium text-muted-foreground mb-1">Minute</p>
-                          <div className="h-[180px] overflow-y-auto pr-2 scrollbar-thin">
-                            {minutes.map((minute) => (
-                              <Button
-                                key={minute}
-                                variant={time.split(':')[1] === minute ? "default" : "ghost"}
-                                className="w-full justify-center text-center mb-1"
-                                onClick={() => {
-                                  const [hour, _] = time.split(':');
-                                  setTime(`${hour}:${minute}`);
-                                }}
-                              >
-                                {minute}
-                              </Button>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </PopoverContent>
-                  </Popover>
-                </div>
+                <Popover open={timePickerOpen} onOpenChange={setTimePickerOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left text-sm font-normal focus-ring",
+                        !time && "text-muted-foreground"
+                      )}
+                    >
+                      <Clock className="mr-2 h-4 w-4" />
+                      {time}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-3 pointer-events-auto">
+                    <TimePicker value={time} onChange={handleTimeChange} />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
             

@@ -104,3 +104,19 @@ export function groupNotesByDate(notes: Note[]): Record<string, Note[]> {
     return acc;
   }, {} as Record<string, Note[]>);
 }
+
+// Generate array of hours (00-23)
+export function getHoursArray(): string[] {
+  return Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
+}
+
+// Generate array of minutes (00-55, step 5)
+export function getMinutesArray(step: number = 5): string[] {
+  return Array.from({ length: 60 / step }, (_, i) => (i * step).toString().padStart(2, '0'));
+}
+
+// Parse time string to get hours and minutes
+export function parseTimeString(timeString: string): { hours: string; minutes: string } {
+  const [hours, minutes] = timeString.split(':');
+  return { hours, minutes };
+}
