@@ -1,4 +1,5 @@
 
+
 # Calendar Notes Haven - Takvim Not Uygulaması
 
 Bu proje, etkinlik ve not takibi yapmak için kullanılan bir takvim uygulamasıdır.
@@ -83,3 +84,4 @@ src/
   ├── pages/              # Sayfa bileşenleri
   └── types/              # TypeScript tip tanımlamaları
 ```
+
