@@ -28,25 +28,24 @@ const TimePicker: React.FC<TimePickerProps> = ({
   const hours = getHoursArray();
   const minutes = getMinutesArray(minuteStep);
   
-  const hourListRef = useRef<HTMLDivElement>(null);
-  const minuteListRef = useRef<HTMLDivElement>(null);
+  const hourScrollRef = useRef<HTMLDivElement>(null);
+  const minuteScrollRef = useRef<HTMLDivElement>(null);
   
   // Scroll to selected values on mount
   useEffect(() => {
-    if (hourListRef.current) {
-      const hourElement = hourListRef.current.querySelector(`[data-value="${selectedHour}"]`);
+    setTimeout(() => {
+      const hourElement = document.querySelector(`[data-hour="${selectedHour}"]`);
+      const minuteElement = document.querySelector(`[data-minute="${selectedMinute}"]`);
+      
       if (hourElement) {
-        hourListRef.current.scrollTop = (hourElement as HTMLElement).offsetTop - 80;
+        hourElement.scrollIntoView({ block: 'center', behavior: 'auto' });
       }
-    }
-    
-    if (minuteListRef.current) {
-      const minuteElement = minuteListRef.current.querySelector(`[data-value="${selectedMinute}"]`);
+      
       if (minuteElement) {
-        minuteListRef.current.scrollTop = (minuteElement as HTMLElement).offsetTop - 80;
+        minuteElement.scrollIntoView({ block: 'center', behavior: 'auto' });
       }
-    }
-  }, []);
+    }, 100);
+  }, [selectedHour, selectedMinute]);
   
   // Update value when hour or minute changes
   useEffect(() => {
@@ -74,12 +73,12 @@ const TimePicker: React.FC<TimePickerProps> = ({
         <div className="text-xs font-medium text-muted-foreground text-center pb-1 border-b">
           {locale === 'tr' ? 'Saat' : 'Hour'}
         </div>
-        <ScrollArea className="h-[180px]">
-          <div className="flex flex-col items-stretch py-1">
+        <ScrollArea className="h-[180px] w-full" scrollHideDelay={0}>
+          <div className="flex flex-col items-stretch py-1" ref={hourScrollRef}>
             {hours.map((hour) => (
               <Button
                 key={hour}
-                data-value={hour}
+                data-hour={hour}
                 variant={selectedHour === hour ? "default" : "ghost"}
                 className={cn(
                   "my-1 rounded-md",
@@ -98,12 +97,12 @@ const TimePicker: React.FC<TimePickerProps> = ({
         <div className="text-xs font-medium text-muted-foreground text-center pb-1 border-b">
           {locale === 'tr' ? 'Dakika' : 'Minute'}
         </div>
-        <ScrollArea className="h-[180px]">
-          <div className="flex flex-col items-stretch py-1">
+        <ScrollArea className="h-[180px] w-full" scrollHideDelay={0}>
+          <div className="flex flex-col items-stretch py-1" ref={minuteScrollRef}>
             {minutes.map((minute) => (
               <Button
                 key={minute}
-                data-value={minute}
+                data-minute={minute}
                 variant={selectedMinute === minute ? "default" : "ghost"}
                 className={cn(
                   "my-1 rounded-md",

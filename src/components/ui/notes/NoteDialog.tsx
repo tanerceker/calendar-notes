@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { tr, enUS } from 'date-fns/locale';
 
 interface NoteDialogProps {
   open: boolean;
@@ -29,20 +30,6 @@ interface NoteDialogProps {
   mode: 'add' | 'edit';
   preSelectedTime?: Date;
 }
-
-const tagOptions = [
-  'work', 'personal', 'important', 'meeting', 'reminder', 'idea', 'task'
-];
-
-const colorOptions = [
-  { name: 'Blue', value: '#3498db' },
-  { name: 'Green', value: '#2ecc71' },
-  { name: 'Purple', value: '#9b59b6' },
-  { name: 'Orange', value: '#e67e22' },
-  { name: 'Red', value: '#e74c3c' },
-  { name: 'Yellow', value: '#f1c40f' },
-  { name: 'Gray', value: '#95a5a6' },
-];
 
 const NoteDialog: React.FC<NoteDialogProps> = ({ 
   open, 
@@ -62,6 +49,21 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
   const [color, setColor] = useState('#3498db');
   const [reminder, setReminder] = useState<Date | null>(null);
   const [timePickerOpen, setTimePickerOpen] = useState(false);
+  
+  // Get tag options with translations
+  const tagOptions = [
+    'work', 'personal', 'important', 'meeting', 'reminder', 'idea', 'task'
+  ];
+  
+  const colorOptions = [
+    { name: 'Blue', value: '#3498db' },
+    { name: 'Green', value: '#2ecc71' },
+    { name: 'Purple', value: '#9b59b6' },
+    { name: 'Orange', value: '#e67e22' },
+    { name: 'Red', value: '#e74c3c' },
+    { name: 'Yellow', value: '#f1c40f' },
+    { name: 'Gray', value: '#95a5a6' },
+  ];
   
   useEffect(() => {
     if (mode === 'add') {
@@ -199,6 +201,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
                       onSelect={(date) => date && setDate(date)}
                       initialFocus
                       className="p-3 pointer-events-auto"
+                      locale={locale === 'tr' ? tr : enUS}
                     />
                   </PopoverContent>
                 </Popover>
@@ -255,7 +258,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
                     key={tag}
                     className="flex items-center px-3 py-1 text-xs rounded-full bg-secondary text-secondary-foreground gap-1"
                   >
-                    <span>{tag}</span>
+                    <span>{t(tag)}</span>
                     <button 
                       type="button" 
                       onClick={() => handleRemoveTag(tag)}
@@ -275,7 +278,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
                     .filter(tag => !tags.includes(tag))
                     .map(tag => (
                       <SelectItem key={tag} value={tag}>
-                        {tag}
+                        {t(tag)}
                       </SelectItem>
                     ))
                   }
