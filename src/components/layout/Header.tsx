@@ -67,84 +67,86 @@ const Header: React.FC<HeaderProps> = ({ onAddNote }) => {
         <h1 className="text-xl font-semibold text-balance">{t('calendarNotes')}</h1>
       </div>
       
-      <div className="flex items-center space-x-4">
-        <div className="flex items-center">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={prevPeriod}
-            aria-label="Previous"
-            className="focus-ring h-8 w-8"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          
-          <span className="text-sm font-medium mx-2 min-w-28 text-center">
-            {getHeaderTitle()}
-          </span>
-          
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={nextPeriod}
-            aria-label="Next"
-            className="focus-ring h-8 w-8"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          {viewOptions.map((option) => (
+      <div className="flex flex-1 justify-center">
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center">
             <Button
-              key={option.value}
-              variant={calendarMode === option.value ? "secondary" : "ghost"}
-              size="sm"
-              onClick={() => setCalendarMode(option.value)}
-              className="text-xs focus-ring px-3"
+              variant="ghost"
+              size="icon"
+              onClick={prevPeriod}
+              aria-label="Previous"
+              className="focus-ring h-8 w-8"
             >
-              {option.label}
+              <ChevronLeft className="h-4 w-4" />
             </Button>
-          ))}
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          {/* Dil Değiştirme Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="focus-ring h-8 w-8">
-                <Globe className="h-4 w-4" />
+            
+            <span className="text-sm font-medium mx-2 min-w-28 text-center">
+              {getHeaderTitle()}
+            </span>
+            
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={nextPeriod}
+              aria-label="Next"
+              className="focus-ring h-8 w-8"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            {viewOptions.map((option) => (
+              <Button
+                key={option.value}
+                variant={calendarMode === option.value ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => setCalendarMode(option.value)}
+                className="text-xs focus-ring px-3"
+              >
+                {option.label}
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setLocale('tr')}>
-                🇹🇷 {t('turkish')}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setLocale('en')}>
-                🇬🇧 {t('english')}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Tema Değiştirme Butonu */}
+            ))}
+          </div>
+          
           <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-            className="focus-ring h-8 w-8"
+            variant="default"
+            size="sm"
+            onClick={onAddNote}
+            className="focus-ring"
           >
-            {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+            <Plus className="h-4 w-4 mr-1" />
+            <span>{t('addNote')}</span>
           </Button>
         </div>
-        
+      </div>
+      
+      <div className="flex items-center space-x-2">
+        {/* Dil Değiştirme Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="focus-ring h-8 w-8">
+              <Globe className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setLocale('tr')}>
+              🇹🇷 {t('turkish')}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setLocale('en')}>
+              🇬🇧 {t('english')}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Tema Değiştirme Butonu */}
         <Button
-          variant="default"
-          size="sm"
-          onClick={onAddNote}
-          className="focus-ring"
+          variant="ghost"
+          size="icon"
+          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          className="focus-ring h-8 w-8"
         >
-          <Plus className="h-4 w-4 mr-1" />
-          <span>{t('addNote')}</span>
+          {theme === 'light' ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
         </Button>
       </div>
     </header>
