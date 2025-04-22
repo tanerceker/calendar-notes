@@ -42,7 +42,7 @@ export const useTimePicker = (initialValue: string, minuteStep: number = 5, onCh
   
   const handleHourClick = useCallback((hour: string) => {
     setSelectedHour(hour);
-    // Update parent when hour changes
+    // Update parent when hour changes, but don't close the picker
     if (onChange && hour && selectedMinute) {
       onChange(`${hour}:${selectedMinute}`);
     }
@@ -50,7 +50,7 @@ export const useTimePicker = (initialValue: string, minuteStep: number = 5, onCh
   
   const handleMinuteClick = useCallback((minute: string) => {
     setSelectedMinute(minute);
-    // Update parent when minute changes
+    // Update parent when minute changes, but don't close the picker
     if (onChange && selectedHour && minute) {
       onChange(`${selectedHour}:${minute}`);
     }
