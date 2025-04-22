@@ -1,70 +1,7 @@
 
-export type Locale = 'tr' | 'en';
+import { TranslationKey } from '@/types/translations';
 
-export type TranslationKey = 
-  | 'calendarNotes'
-  | 'addNote'
-  | 'editNote'
-  | 'month'
-  | 'week'
-  | 'day'
-  | 'lightMode'
-  | 'darkMode'
-  | 'language'
-  | 'turkish'
-  | 'english'
-  | 'notFound'
-  | 'pageNotFound'
-  | 'returnToCalendar'
-  | 'weekOf'
-  | 'title'
-  | 'content'
-  | 'date'
-  | 'time'
-  | 'color'
-  | 'tags'
-  | 'addTag'
-  | 'cancel'
-  | 'update'
-  | 'save'
-  | 'noteAdded'
-  | 'noteUpdated'
-  | 'noteDeleted'
-  | 'successfullyCreated'
-  | 'successfullyUpdated'
-  | 'successfullyDeleted'
-  | 'noNotes'
-  | 'allNotesFor'
-  | 'currentHour'
-  | 'pickDate'
-  | 'timeline'
-  | 'loading'
-  | 'moreNotes'
-  | 'today'
-  | 'delete'
-  | 'confirmDelete'
-  | 'confirmDeleteMessage'
-  | 'welcome'
-  | 'welcomeNote'
-  | 'createNote'
-  | 'updateNote'
-  | 'deleteWarning'
-  | 'clickAddNote'
-  | 'work'
-  | 'personal'
-  | 'important'
-  | 'meeting'
-  | 'reminder'
-  | 'idea'
-  | 'task'
-  | 'year'  
-  | 'selectYear'
-  | 'selectMonth'
-  | 'markComplete'
-  | 'markIncomplete'
-  | 'edit'
-  | 'pin'
-  | 'unpin';
+export type Locale = 'tr' | 'en';
 
 export const translations: {
   [key in Locale]: {
@@ -134,7 +71,25 @@ export const translations: {
     markIncomplete: 'Tamamlanmadı olarak işaretle',
     edit: 'Düzenle',
     pin: 'Sabitle',
-    unpin: 'Sabitliği kaldır'
+    unpin: 'Sabitliği kaldır',
+    confirm: 'Onayla',
+    deleteNotePrompt: 'Notu silmek istediğinizden emin misiniz?',
+    completed: 'Tamamlandı',
+    incomplete: 'Tamamlanmadı',
+    thisWeek: 'Bu Hafta',
+    thisMonth: 'Bu Ay',
+    older: 'Daha Eski',
+    search: 'Ara',
+    filterByTag: 'Etikete Göre Filtrele',
+    noNotesFound: 'Not Bulunamadı',
+    all: 'Tümü',
+    pinned: 'Sabitlenmiş',
+    notes: 'Notlar',
+    sortBy: 'Sırala',
+    dateCreated: 'Oluşturulma Tarihi',
+    priority: 'Öncelik',
+    selectTags: 'Etiketleri Seç',
+    createNewTag: 'Yeni Etiket Oluştur'
   },
   en: {
     calendarNotes: 'Calendar Notes',
@@ -199,6 +154,24 @@ export const translations: {
     markIncomplete: 'Mark as Incomplete',
     edit: 'Edit',
     pin: 'Pin',
-    unpin: 'Unpin'
+    unpin: 'Unpin',
+    confirm: 'Confirm',
+    deleteNotePrompt: 'Are you sure you want to delete this note?',
+    completed: 'Completed',
+    incomplete: 'Incomplete',
+    thisWeek: 'This Week',
+    thisMonth: 'This Month',
+    older: 'Older',
+    search: 'Search',
+    filterByTag: 'Filter by Tag',
+    noNotesFound: 'No Notes Found',
+    all: 'All',
+    pinned: 'Pinned',
+    notes: 'Notes',
+    sortBy: 'Sort By',
+    dateCreated: 'Date Created',
+    priority: 'Priority',
+    selectTags: 'Select Tags',
+    createNewTag: 'Create New Tag'
   }
 };

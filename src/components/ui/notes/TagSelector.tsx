@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { TranslationKey } from '@/types/translations';
 
 interface TagSelectorProps {
   tags: string[];
@@ -34,7 +35,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
             key={tag}
             className="flex items-center px-3 py-1 text-xs rounded-full bg-secondary text-secondary-foreground gap-1"
           >
-            <span>{t(tag)}</span>
+            <span>{t(tag as TranslationKey)}</span>
             <button 
               type="button" 
               onClick={() => onRemoveTag(tag)}
@@ -54,7 +55,7 @@ const TagSelector: React.FC<TagSelectorProps> = ({
             .filter(tag => !tags.includes(tag))
             .map(tag => (
               <SelectItem key={tag} value={tag}>
-                {t(tag)}
+                {t(tag as TranslationKey)}
               </SelectItem>
             ))
           }

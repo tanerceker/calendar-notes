@@ -6,7 +6,7 @@ import NoteItem from './NoteItem';
 import DeleteNoteDialog from './DeleteNoteDialog';
 import EmptyNoteList from './EmptyNoteList';
 import NoteDialog from './NoteDialog';
-import { format } from 'date-fns';
+import { Note } from '@/types/calendar';
 
 const NoteList: React.FC = () => {
   const { notes, updateNote, deleteNote } = useCalendar();
@@ -100,4 +100,4 @@ const NoteList: React.FC = () => {
   );
 };
 
-export default NoteList;
+export default React.memo(NoteList);

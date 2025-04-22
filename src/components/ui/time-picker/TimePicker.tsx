@@ -1,9 +1,10 @@
 
-import React, { useState, useEffect } from 'react';
-import { getHoursArray, getMinutesArray, parseTimeString } from '@/lib/calendar-utils';
+import React, { useEffect } from 'react';
+import { parseTimeString } from '@/lib/calendar-utils';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import TimePickerColumn from './TimePickerColumn';
+import { useTimePicker } from './useTimePicker';
 
 interface TimePickerProps {
   value: string; // "HH:mm" format
@@ -18,50 +19,20 @@ const TimePicker: React.FC<TimePickerProps> = ({
   minuteStep = 5,
   className
 }) => {
-  const { t, locale } = useLanguage();
-  const { hours: initialHours, minutes: initialMinutes } = parseTimeString(value);
+  const { locale } = useLanguage();
+  const { 
+    hours, 
+    minutes, 
+    selectedHour, 
+    selectedMinute, 
+    handleHourClick, 
+    handleMinuteClick 
+  } = useTimePicker(value, minuteStep);
   
-  const [selectedHour, setSelectedHour] = useState<string>(initialHours);
-  const [selectedMinute, setSelectedMinute] = useState<string>(initialMinutes);
-  
-  const hours = getHoursArray();
-  const minutes = getMinutesArray(minuteStep);
-  
-  // Scroll to selected values on mount
-  useEffect(() => {
-    setTimeout(() => {
-      const hourElement = document.querySelector(`[data-hour="${selectedHour}"]`);
-      const minuteElement = document.querySelector(`[data-minute="${selectedMinute}"]`);
-      
-      if (hourElement) {
-        hourElement.scrollIntoView({ block: 'center', behavior: 'auto' });
-      }
-      
-      if (minuteElement) {
-        minuteElement.scrollIntoView({ block: 'center', behavior: 'auto' });
-      }
-    }, 100);
-  }, [selectedHour, selectedMinute]);
-  
-  // Update value when hour or minute changes
+  // Update parent value when hour or minute changes
   useEffect(() => {
     onChange(`${selectedHour}:${selectedMinute}`);
   }, [selectedHour, selectedMinute, onChange]);
-  
-  // Update local state if props value changes
-  useEffect(() => {
-    const { hours, minutes } = parseTimeString(value);
-    setSelectedHour(hours);
-    setSelectedMinute(minutes);
-  }, [value]);
-  
-  const handleHourClick = (hour: string) => {
-    setSelectedHour(hour);
-  };
-  
-  const handleMinuteClick = (minute: string) => {
-    setSelectedMinute(minute);
-  };
   
   const hourTitle = locale === 'tr' ? 'Saat' : 'Hour';
   const minuteTitle = locale === 'tr' ? 'Dakika' : 'Minute';
