@@ -31,7 +31,9 @@ const TimePicker: React.FC<TimePickerProps> = ({
   
   // Update parent value when hour or minute changes
   useEffect(() => {
-    onChange(`${selectedHour}:${selectedMinute}`);
+    if (selectedHour && selectedMinute) {
+      onChange(`${selectedHour}:${selectedMinute}`);
+    }
   }, [selectedHour, selectedMinute, onChange]);
   
   const hourTitle = locale === 'tr' ? 'Saat' : 'Hour';

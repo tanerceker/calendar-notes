@@ -81,4 +81,5 @@ export type TranslationKey =
   | 'meeting'
   | 'reminder'
   | 'idea'
-  | 'task';
+  | 'task'
+  | 'update'; // Added missing key

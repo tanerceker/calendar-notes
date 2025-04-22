@@ -11,12 +11,6 @@ export const useTimePicker = (initialValue: string, minuteStep: number = 5) => {
   const hours = getHoursArray();
   const minutes = getMinutesArray(minuteStep);
   
-  // Update value when hour or minute changes
-  useEffect(() => {
-    const formattedTime = `${selectedHour}:${selectedMinute}`;
-    return formattedTime;
-  }, [selectedHour, selectedMinute]);
-  
   // Update local state if props value changes
   useEffect(() => {
     const { hours, minutes } = parseTimeString(initialValue);
