@@ -74,9 +74,13 @@
     --calendar-selected-foreground: 0 0% 100%;
   }
 
-  body {
-    @apply bg-background text-foreground antialiased;
+  body, html {
+    @apply bg-background text-foreground antialiased h-full overflow-hidden;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+  }
+
+  #root {
+    @apply h-full overflow-hidden;
   }
 
   html {
