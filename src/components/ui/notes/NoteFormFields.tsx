@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -39,10 +39,11 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
 }) => {
   const { t, locale } = useLanguage();
   
-  const handleTimeChange = (newTime: string) => {
-    setTime(newTime);
-    // Don't automatically close the popover to allow multiple selections
-  };
+  const handleTimeChange = useCallback((newTime: string) => {
+    if (newTime) {
+      setTime(newTime);
+    }
+  }, [setTime]);
 
   return (
     <div className="grid gap-4">
@@ -86,7 +87,7 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? getFormattedDate(date, locale) : <span>{t('pickDate')}</span>}
+                {date ? getFormattedDate(date, locale) : <span>{t('date')}</span>}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0 pointer-events-auto">
@@ -125,6 +126,7 @@ const NoteFormFields: React.FC<NoteFormFieldsProps> = ({
                 <Button 
                   size="sm" 
                   onClick={() => setTimePickerOpen(false)}
+                  className="self-end"
                 >
                   {t('save')}
                 </Button>

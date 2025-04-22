@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getHoursArray, getMinutesArray, parseTimeString } from '@/lib/calendar-utils';
 
 export const useTimePicker = (initialValue: string, minuteStep: number = 5) => {
@@ -18,29 +18,35 @@ export const useTimePicker = (initialValue: string, minuteStep: number = 5) => {
     setSelectedMinute(minutes);
   }, [initialValue]);
   
-  // Scroll to selected values on mount
+  // Scroll to selected values on mount with a safe timeout
   useEffect(() => {
-    setTimeout(() => {
-      const hourElement = document.querySelector(`[data-hour="${selectedHour}"]`);
-      const minuteElement = document.querySelector(`[data-minute="${selectedMinute}"]`);
-      
-      if (hourElement) {
-        hourElement.scrollIntoView({ block: 'center', behavior: 'auto' });
-      }
-      
-      if (minuteElement) {
-        minuteElement.scrollIntoView({ block: 'center', behavior: 'auto' });
+    const timeoutId = setTimeout(() => {
+      try {
+        const hourElement = document.querySelector(`[data-hour="${selectedHour}"]`);
+        const minuteElement = document.querySelector(`[data-minute="${selectedMinute}"]`);
+        
+        if (hourElement) {
+          hourElement.scrollIntoView({ block: 'center', behavior: 'auto' });
+        }
+        
+        if (minuteElement) {
+          minuteElement.scrollIntoView({ block: 'center', behavior: 'auto' });
+        }
+      } catch (err) {
+        console.error("Error scrolling time picker into view:", err);
       }
     }, 100);
+    
+    return () => clearTimeout(timeoutId);
   }, [selectedHour, selectedMinute]);
   
-  const handleHourClick = (hour: string) => {
+  const handleHourClick = useCallback((hour: string) => {
     setSelectedHour(hour);
-  };
+  }, []);
   
-  const handleMinuteClick = (minute: string) => {
+  const handleMinuteClick = useCallback((minute: string) => {
     setSelectedMinute(minute);
-  };
+  }, []);
   
   return {
     hours,

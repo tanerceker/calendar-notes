@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -110,7 +111,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] animate-in scale-in">
+      <DialogContent className="sm:max-w-[550px] animate-in scale-in">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>
@@ -135,17 +136,19 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
               setTimePickerOpen={setTimePickerOpen}
             />
             
-            <ColorPicker
-              selectedColor={color}
-              onColorSelect={setColor}
-            />
-            
-            <TagSelector
-              tags={tags}
-              onAddTag={handleAddTag}
-              onRemoveTag={handleRemoveTag}
-              availableTags={tagOptions}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+              <ColorPicker
+                selectedColor={color}
+                onColorSelect={setColor}
+              />
+              
+              <TagSelector
+                tags={tags}
+                onAddTag={handleAddTag}
+                onRemoveTag={handleRemoveTag}
+                availableTags={tagOptions}
+              />
+            </div>
           </div>
           
           <DialogFooter>
