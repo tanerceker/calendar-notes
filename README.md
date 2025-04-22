@@ -1,12 +1,12 @@
+![Preview App](/public/preview.jpg)
 
+# Takvim Not Uygulaması
 
-# Calendar Notes Haven - Takvim Not Uygulaması
-
-Bu proje, etkinlik ve not takibi yapmak için kullanılan bir takvim uygulamasıdır.
+Bu proje, etkinlik ve not takibi yapmak için kullanılan bir takvim not uygulamasıdır.
 
 ## Proje Hakkında
 
-Calendar Notes Haven, günlük yaşamınızı organize etmenize yardımcı olmak için tasarlanmış bir web uygulamasıdır. Kullanıcılar notlar ekleyebilir, düzenleyebilir, silebilir ve takvim üzerinde görüntüleyebilir. Çoklu dil desteği (Türkçe ve İngilizce) ve karanlık/aydınlık tema seçenekleri sunar.
+Günlük yaşamınızı organize etmenize yardımcı olmak için tasarlanmış bir web uygulamasıdır. Kullanıcılar notlar ekleyebilir, düzenleyebilir, silebilir ve takvim üzerinde görüntüleyebilir. Çoklu dil desteği (Türkçe ve İngilizce) ve karanlık/aydınlık tema seçenekleri sunar.
 
 ## Özellikler
 
@@ -23,7 +23,7 @@ Calendar Notes Haven, günlük yaşamınızı organize etmenize yardımcı olmak
 Projede kullanılan başlıca teknolojiler:
 
 - **React**: UI bileşenleri için JavaScript kütüphanesi
-- **TypeScript**: Tip güvenliği için JavaScript üzerine kurulu bir dil
+- **TypeScript**: Tür güvenliği için JavaScript üzerine kurulu bir dil
 - **Vite**: Hızlı geliştirme ve derleme için modern bir araç
 - **Tailwind CSS**: Hızlı UI geliştirme için kullanılan CSS framework'ü
 - **shadcn/ui**: Modern ve özelleştirilebilir UI bileşenlerini kullanan kütüphane
@@ -46,7 +46,7 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleyi
 
 ```sh
 git clone <repo-url>
-cd calendar-notes-haven
+cd calendar-notes
 ```
 
 2. Bağımlılıkları yükleyin:
