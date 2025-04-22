@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { Note } from '@/types/calendar';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -47,6 +48,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
   mode
 }) => {
   const { selectedDate, addNote, updateNote } = useCalendar();
+  const { t } = useLanguage();
   
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -118,6 +120,10 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
   const handleRemoveTag = (tagToRemove: string) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
+
+  // Modern zaman seçici için saatler ve dakikalar
+  const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
+  const minutes = Array.from({ length: 12 }, (_, i) => (i * 5).toString().padStart(2, '0'));
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -125,18 +131,21 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>
-              {mode === 'add' ? 'Add New Note' : 'Edit Note'}
+              {mode === 'add' ? t('addNote') : t('editNote')}
             </DialogTitle>
+            <DialogDescription className="text-muted-foreground text-sm">
+              {mode === 'add' ? t('addNote') : t('editNote')}
+            </DialogDescription>
           </DialogHeader>
           
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <label htmlFor="title" className="text-sm font-medium">
-                Title
+                {t('title')}
               </label>
               <Input
                 id="title"
-                placeholder="Note title"
+                placeholder={t('title')}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
@@ -146,11 +155,11 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
             
             <div className="grid gap-2">
               <label htmlFor="content" className="text-sm font-medium">
-                Content
+                {t('content')}
               </label>
               <Textarea
                 id="content"
-                placeholder="Write your note here..."
+                placeholder={t('content')}
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 className="min-h-[100px] focus-ring"
@@ -159,7 +168,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
             
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <label className="text-sm font-medium">Date</label>
+                <label className="text-sm font-medium">{t('date')}</label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -170,7 +179,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date ? format(date, 'PPP') : <span>Pick a date</span>}
+                      {date ? format(date, 'PPP') : <span>{t('pickDate')}</span>}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0 pointer-events-auto">
@@ -187,23 +196,69 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
               
               <div className="grid gap-2">
                 <label htmlFor="time" className="text-sm font-medium">
-                  Time
+                  {t('time')}
                 </label>
                 <div className="relative">
-                  <Input
-                    id="time"
-                    type="time"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    className="focus-ring"
-                  />
-                  <Clock className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left text-sm font-normal focus-ring",
+                          !time && "text-muted-foreground"
+                        )}
+                      >
+                        <Clock className="mr-2 h-4 w-4" />
+                        {time}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-48 p-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-2">
+                          <p className="text-xs font-medium text-muted-foreground mb-1">Hour</p>
+                          <div className="h-[180px] overflow-y-auto pr-2 scrollbar-thin">
+                            {hours.map((hour) => (
+                              <Button
+                                key={hour}
+                                variant={time.split(':')[0] === hour ? "default" : "ghost"}
+                                className="w-full justify-center text-center mb-1"
+                                onClick={() => {
+                                  const [_, min] = time.split(':');
+                                  setTime(`${hour}:${min}`);
+                                }}
+                              >
+                                {hour}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-xs font-medium text-muted-foreground mb-1">Minute</p>
+                          <div className="h-[180px] overflow-y-auto pr-2 scrollbar-thin">
+                            {minutes.map((minute) => (
+                              <Button
+                                key={minute}
+                                variant={time.split(':')[1] === minute ? "default" : "ghost"}
+                                className="w-full justify-center text-center mb-1"
+                                onClick={() => {
+                                  const [hour, _] = time.split(':');
+                                  setTime(`${hour}:${minute}`);
+                                }}
+                              >
+                                {minute}
+                              </Button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             </div>
             
             <div className="grid gap-2">
-              <label className="text-sm font-medium">Color</label>
+              <label className="text-sm font-medium">{t('color')}</label>
               <div className="flex space-x-2">
                 {colorOptions.map((colorOption) => (
                   <button
@@ -222,7 +277,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
             </div>
             
             <div className="grid gap-2">
-              <label className="text-sm font-medium">Tags</label>
+              <label className="text-sm font-medium">{t('tags')}</label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {tags.map((tag) => (
                   <div 
@@ -242,7 +297,7 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
               </div>
               <Select onValueChange={handleAddTag}>
                 <SelectTrigger className="focus-ring">
-                  <SelectValue placeholder="Add a tag" />
+                  <SelectValue placeholder={t('addTag')} />
                 </SelectTrigger>
                 <SelectContent>
                   {tagOptions
@@ -264,10 +319,10 @@ const NoteDialog: React.FC<NoteDialogProps> = ({
               variant="secondary" 
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {t('cancel')}
             </Button>
             <Button type="submit">
-              {mode === 'add' ? 'Add Note' : 'Update Note'}
+              {mode === 'add' ? t('save') : t('update')}
             </Button>
           </DialogFooter>
         </form>

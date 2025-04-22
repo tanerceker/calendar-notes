@@ -4,6 +4,7 @@ import { addMonths, subMonths, addWeeks, subWeeks, addDays, subDays } from 'date
 import { CalendarMode, Note } from '@/types/calendar';
 import { generateCalendarMonth } from '@/lib/calendar-utils';
 import { toast } from '@/hooks/use-toast';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface CalendarContextType {
   currentDate: Date;
@@ -44,6 +45,7 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [calendarMode, setCalendarMode] = useState<CalendarMode>('month');
   const [notes, setNotes] = useState<Note[]>(initialNotes);
+  const { t } = useLanguage();
   
   // Load notes from localStorage on initial render
   useEffect(() => {
@@ -109,8 +111,8 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     
     setNotes([...notes, newNote]);
     toast({
-      title: "Note Added",
-      description: "Your note has been successfully created.",
+      title: t('noteAdded'),
+      description: t('successfullyCreated'),
     });
   };
   
@@ -121,16 +123,16 @@ export const CalendarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         : note
     ));
     toast({
-      title: "Note Updated",
-      description: "Your note has been successfully updated.",
+      title: t('noteUpdated'),
+      description: t('successfullyUpdated'),
     });
   };
   
   const deleteNote = (id: string) => {
     setNotes(notes.filter(note => note.id !== id));
     toast({
-      title: "Note Deleted",
-      description: "Your note has been successfully deleted.",
+      title: t('noteDeleted'),
+      description: t('successfullyDeleted'),
     });
   };
   

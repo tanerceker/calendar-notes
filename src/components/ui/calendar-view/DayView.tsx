@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useCalendar } from '@/context/CalendarContext';
+import { useLanguage } from '@/context/LanguageContext';
 import { format } from 'date-fns';
 import { Note } from '@/types/calendar';
 import { Separator } from '@/components/ui/separator';
@@ -10,6 +11,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 
 const DayView: React.FC = () => {
   const { selectedDate, getNotesForDate } = useCalendar();
+  const { t } = useLanguage();
   const [notes, setNotes] = useState<Note[]>([]);
   const [isTimelineOpen, setIsTimelineOpen] = useState(true);
   
@@ -45,7 +47,7 @@ const DayView: React.FC = () => {
         className="flex-1 overflow-auto hide-scrollbar"
       >
         <CollapsibleTrigger className="flex items-center justify-center w-full p-2 text-sm text-muted-foreground hover:bg-secondary/50">
-          Timeline {isTimelineOpen ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />}
+          {t('timeline')} {isTimelineOpen ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />}
         </CollapsibleTrigger>
         
         <CollapsibleContent className="flex-1">
@@ -92,7 +94,7 @@ const DayView: React.FC = () => {
                       </div>
                     ) : (
                       <div className="text-xs text-muted-foreground/50 italic">
-                        {isCurrentHour ? "Current hour - No notes" : "No notes"}
+                        {isCurrentHour ? t('currentHour') : t('noNotes')}
                       </div>
                     )}
                   </div>
@@ -106,7 +108,7 @@ const DayView: React.FC = () => {
       <Separator />
       
       <div className="p-4">
-        <h3 className="text-sm font-medium mb-3">All Notes for {format(selectedDate, 'MMMM d')}</h3>
+        <h3 className="text-sm font-medium mb-3">{t('allNotesFor')} {format(selectedDate, 'MMMM d')}</h3>
         
         {notes.length > 0 ? (
           <div className="space-y-3">
@@ -141,7 +143,7 @@ const DayView: React.FC = () => {
           </div>
         ) : (
           <div className="text-center p-8 text-muted-foreground">
-            <p>No notes for this day</p>
+            <p>{t('noNotes')}</p>
           </div>
         )}
       </div>
